@@ -21,6 +21,9 @@ t_player_number Command::getPlayerNumber() {
 
 
 /*Команда с направлением */
+/*Команда с направлением */
+/*Команда с направлением */
+/*Команда с направление
 CommandWithDirection::CommandWithDirection() : 
 	Command() {
 	command_direction = Direction::Forward;

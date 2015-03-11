@@ -58,6 +58,6 @@ class CommandMove : public CommandWithDirection {
 };
 
 /*Команда атаки */
-class CommandAttack : public CommandWithDirection {
+class CommandAttack : public Command {
 
 };
