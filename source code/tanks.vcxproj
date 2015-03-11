@@ -72,6 +72,12 @@
     <ClInclude Include="map\interface.h" />
     <ClInclude Include="player\interface.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="general_types.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CommandClasses.cd" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
