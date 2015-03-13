@@ -8,6 +8,16 @@
 /*Номер игрока*/
 typedef unsigned int t_player_number;
 
+//для игроков, урона от пуль, стен
+typedef unsigned int hit_points;
+
+//структура данных для координат едничного квадрата карты (можно заменить классом каким-нибудь)
+struct PositionCoord
+{
+	int x;
+	int y;
+};
+
 /*Направление движения/стельбы*/
 enum class Direction {Left, Right, Forward, Backward};
 
