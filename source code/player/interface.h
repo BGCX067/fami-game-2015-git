@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\interface.h"
+using namespace map;
 
 /*
 Интерфейсы взаимодействия с системой управления игроком (PLAYER).
@@ -12,52 +13,70 @@ namespace player
 	{
 		PositionCoord player_pos;
 		Direction player_direction;
-		//unsigned int player_color;
 		hit_points hp;
 		hit_points damage;
 
 	public:
-		PLAYER(PositionCoord startPosition, /*unsigned int color*/ unsigned int startHP)
+		PLAYER(PositionCoord startPosition, unsigned int startHP)
 		{
 			player_pos.x = startPosition.x;
 			player_pos.y = startPosition.y;
-			//player_color = color;
 			hp = startHP;
 		}
 
-		PositionCoord getCurrentPosition();
+		PositionCoord getCurrentPosition()
+		{
+			return player_pos;
+		}
 
-		Direction getCurrentDirection();
+		Direction getCurrentDirection()
+		{
+			return player_direction;
+		}
+	
+		/*hit_points getCurrentHitPoints()
+		{
+			return hp;
+		}  возможно лишнее*/
 
-		unsigned int getCurrentHitPoints();
-
-		//unsigned int getColor();
-
-		bool GetDamage(hit_points dmg)
+		//Танк получает урон. 0 - hp еще осталось, 1 - нет     (вместо проверки hp на равенство 0)
+		bool RecieveDamage(hit_points dmg)
 		{
 			hp -= dmg;
 			if (hp <= 0) return 1;
 			else return 0;
 		}
 
-		void Move(CommandMove command);
+		/*bool Move(CommandMove command, MAP* map);*/
 
-		void Turn(CommandWithDirection command);
+		void Turn(CommandWithDirection command)
+		{
+			player_direction = command.getCommandDirection();
+		}
 
-		BULLET* Attack(CommandAttack command);
+		//BULLET* Attack(CommandAttack command);
 	};
 
 
 	class BULLET
 	{
+		t_player_number player_id;
 		PositionCoord bullet_pos;
+		Direction bullet_direction;
 		hit_points damage;
 
 	public:
-		BULLET(PositionCoord startPosition, hit_points dmg)
+		BULLET(t_player_number id, PositionCoord startPosition, Direction startDirection, hit_points dmg)
 		{
+			player_id = id;
 			bullet_pos = startPosition;
+			bullet_direction = startDirection;
 			damage = dmg;
+		}
+
+		t_player_number getPlayerId()
+		{
+			return player_id;
 		}
 
 		PositionCoord getCurrentPosition()
@@ -69,6 +88,8 @@ namespace player
 		{
 			return damage;
 		}
+
+		/*Move(CommandMove command);*/
 
 		//~BULLET();
 	};
