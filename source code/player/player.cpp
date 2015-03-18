@@ -3,11 +3,13 @@
 using namespace player;
 using namespace map;
 
-PLAYER::PLAYER(PositionCoord startPosition, hit_points startHP)
+PLAYER::PLAYER(PositionCoord startPosition, Direction startDirection, hit_points startHP, hit_points startDamage)
 {
 	player_pos.x = startPosition.x;
 	player_pos.y = startPosition.y;
+	player_direction = startDirection;
 	hp = startHP;
+	damage = startDamage;
 }
 
 PositionCoord PLAYER::getCurrentPosition()

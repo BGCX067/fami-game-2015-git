@@ -17,7 +17,7 @@ namespace player
 		hit_points damage;
 
 	public:
-		PLAYER(PositionCoord, hit_points);
+		PLAYER(PositionCoord, Direction, hit_points, hit_points);
 
 		PositionCoord getCurrentPosition();
 
