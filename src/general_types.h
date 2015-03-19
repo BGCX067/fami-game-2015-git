@@ -18,7 +18,7 @@ struct PositionCoord {
 };
 
 /*Направление движения/стельбы*/
-enum class Direction {Left, Right, Forward, Backward};
+enum class Direction {Left, Right, Up, Down};
 
 // ========================================================================
 // ======================== Классы команд =================================

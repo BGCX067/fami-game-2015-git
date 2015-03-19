@@ -1,6 +1,7 @@
 #pragma once
 
 #include "..\interface.h"
+#include <memory>
 using namespace map;
 
 /*
@@ -15,9 +16,10 @@ namespace player
 		Direction player_direction;
 		hit_points hp;
 		hit_points damage;
+		int size;
 
 	public:
-		PLAYER(PositionCoord, Direction, hit_points, hit_points);
+		PLAYER(PositionCoord, Direction, hit_points, hit_points,int size);
 
 		PositionCoord getCurrentPosition();
 
@@ -28,11 +30,11 @@ namespace player
 		//Танк получает урон. 0 - hp еще осталось, 1 - нет     (вместо проверки hp на равенство 0)
 		bool RecieveDamage(hit_points);
 
-		//bool Move(CommandMove command, MAP* map);
+		bool Move(CommandMove command, class MAP* map);
 
 		void Turn(CommandWithDirection);
 
-		//BULLET* Attack(CommandAttack command);
+		std::shared_ptr<class BULLET> Attack(CommandAttack command);
 	};
 
 
@@ -42,6 +44,8 @@ namespace player
 		PositionCoord bullet_pos;
 		Direction bullet_direction;
 		hit_points damage;
+
+		double velocity;
 
 	public:
 		BULLET(t_player_number, PositionCoord, Direction, hit_points);

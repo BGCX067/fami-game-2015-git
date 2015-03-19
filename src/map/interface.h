@@ -7,6 +7,11 @@
 */
 
 namespace map {
+	class MAP
+	{
+	public:
+		virtual bool IsEmpty(PositionCoord coord) = 0; //Necessary for tank moving
+	};
 	
 	
 };
