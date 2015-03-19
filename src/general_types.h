@@ -4,9 +4,17 @@
 Описание типов, общих для нескольких подсистем
 */
 
+/*Отчки жизни игрока*/
+ typedef unsigned int t_player_number;
 
 /*Номер игрока*/
 typedef unsigned int t_player_number;
+
+/* Положение на карте */
+struct PositionCoord { 		 
+	int x; 		 
+	int y; 		 
+};
 
 /*Направление движения/стельбы*/
 enum class Direction {Left, Right, Forward, Backward};
