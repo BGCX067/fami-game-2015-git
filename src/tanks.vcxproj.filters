@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Файлы исходного кода">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Заголовочные файлы\gui">
+      <UniqueIdentifier>{fdfe956d-c43f-4123-b51e-9102d93a615a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\map">
+      <UniqueIdentifier>{a57cfdb2-350c-478a-a3c8-07be16edf8ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\graph">
+      <UniqueIdentifier>{87d54637-9699-404e-ba0b-d14698ed4307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\player">
+      <UniqueIdentifier>{483c4945-4499-4d8f-975d-125ba11624ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Заголовочные файлы\logic">
+      <UniqueIdentifier>{6698d9b3-a450-4bdd-81c0-5003ebb36de6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="interface.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="gui\interface.h">
+      <Filter>Заголовочные файлы\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="map\interface.h">
+      <Filter>Заголовочные файлы\map</Filter>
+    </ClInclude>
+    <ClInclude Include="graph\interface.h">
+      <Filter>Заголовочные файлы\graph</Filter>
+    </ClInclude>
+    <ClInclude Include="logic\interface.h">
+      <Filter>Заголовочные файлы\logic</Filter>
+    </ClInclude>
+    <ClInclude Include="player\interface.h">
+      <Filter>Заголовочные файлы\player</Filter>
+    </ClInclude>
+    <ClInclude Include="general_types.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="general_types.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CommandClasses.cd">
+      <Filter>Файлы ресурсов</Filter>
+    </None>
+  </ItemGroup>
+</Project>
