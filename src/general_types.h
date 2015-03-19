@@ -4,11 +4,12 @@
 Описание типов, общих для нескольких подсистем
 */
 
-/*Отчки жизни игрока*/
- typedef unsigned int t_player_number;
 
 /*Номер игрока*/
 typedef unsigned int t_player_number;
+
+/*Отчки жизни игрока*/
+ typedef unsigned int hit_points;
 
 /* Положение на карте */
 struct PositionCoord { 		 
