@@ -74,6 +74,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="general_types.cpp" />
+    <ClCompile Include="player\bullet.cpp" />
+    <ClCompile Include="player\player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="CommandClasses.cd" />
