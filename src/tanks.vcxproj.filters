@@ -56,11 +56,11 @@
     <ClCompile Include="general_types.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="player\player.cpp">
-      <Filter>Заголовочные файлы\player</Filter>
-    </ClCompile>
     <ClCompile Include="player\bullet.cpp">
-      <Filter>Заголовочные файлы\player</Filter>
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="player\player.cpp">
+      <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

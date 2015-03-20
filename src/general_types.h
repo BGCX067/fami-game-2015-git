@@ -8,13 +8,20 @@
 /*Номер игрока*/
 typedef unsigned int t_player_number;
 
-/*Отчки жизни игрока*/
+/*Очки жизни игрока*/
  typedef unsigned int hit_points;
 
 /* Положение на карте */
-struct PositionCoord { 		 
-	int x; 		 
-	int y; 		 
+struct PositionCoord {
+	int x;
+	int y;
+
+	//Конструктор
+	PositionCoord(int X, int Y)
+	{
+		x = X;
+		y = Y;
+	}
 };
 
 /*Направление движения/стельбы*/

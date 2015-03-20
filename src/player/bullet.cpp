@@ -24,3 +24,8 @@ hit_points BULLET::getDamage()
 {
 	return damage;
 }
+
+void BULLET::Move(CommandMove command)
+{
+
+}
