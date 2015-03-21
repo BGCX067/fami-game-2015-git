@@ -17,11 +17,28 @@ struct PositionCoord {
 	int y;
 
 	//Конструктор
-	PositionCoord(int X, int Y)
-	{
+    PositionCoord(int X, int Y) {
 		x = X;
 		y = Y;
 	}
+
+    PositionCoord(const PositionCoord & f) {
+        x = f.x;
+        y = f.y;
+    }
+
+    bool operator == (const PositionCoord & t) const {
+        return x == t.x && y == t.y;
+    }
+
+    PositionCoord & operator = (const PositionCoord & other) {
+        if(this != & other)
+        {
+            this->x = other.x;
+            this->y = other.y;
+        }
+        return *this;
+    }
 };
 
 /*Направление движения/стельбы*/

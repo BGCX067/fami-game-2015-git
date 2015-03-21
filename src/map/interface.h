@@ -1,7 +1,7 @@
 #pragma once
 #include <functional>
 #include <map>
-#include "..\interface.h"
+#include "../interface.h"
 /*
 Интерфейсы взаимодействия с системой игровой карты (MAP).
 */

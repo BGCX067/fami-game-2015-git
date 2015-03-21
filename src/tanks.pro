@@ -17,7 +17,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         tanksgui.cpp \
-    general_types.cpp
+    general_types.cpp \
+    logic/logic.cpp
 
 HEADERS  += tanksgui.h \
     graph/interface.h \

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "..\interface.h"
+#include "../interface.h"
 #include <memory>
 using namespace map;
 using namespace std;
