@@ -15,18 +15,21 @@
 //Светлана Трофимова
 
 namespace logic {
-    class Logic {
-    private:
-        std::string gameStatus; //текущий статус игры
-        std::queue commandsFromGUI; //очередь gui комманд
+  class Logic 
+  {
+  public:
+    Logic();
+    ~Logic();
 
-        std::string getNextCommandFromGUI(); //мы забираем команду из gui
-        setCommandForPlayer(); //дать комманду игроку
-        void updateMap(); //обновить карту после изменений
+    string getStatusForGUI(); //gui отдаем статус игры
+    void getNextCommandFromGUI(CommandFromGUI g_commandFromGUI); //мы забираем команду из gui
+    void run(); //запуск логики, должна запускать gui    
+  private:
+    string _gameStatus; //текущий статус игры
+    queue<CommandFromGUI> _commandsFromGUI; //очередь gui комманд
 
-    public:
-        void run(); //запуск логики, должна запускать gui
-        std::string getStatusForGUI(); //gui отдаем статус игры
-    };
+    void setCommandForPlayer(); //дать комманду игроку
+    void updateMap(); //обновить карту после изменений
+  };
 	
 }

@@ -17,7 +17,8 @@ struct PositionCoord {
 	int y;
 
 	//Конструктор
-    PositionCoord(int X, int Y) {
+  PositionCoord(){};
+  PositionCoord(int X, int Y) {
 		x = X;
 		y = Y;
 	}
@@ -43,6 +44,8 @@ struct PositionCoord {
 
 /*Направление движения/стельбы*/
 enum class Direction {Left, Right, Up, Down};
+// Команды, которые приходят от GUI в логику. 
+enum class GUICommand {Left, Right, Up, Down, Atack}; 
 
 // ========================================================================
 // ======================== Классы команд =================================
@@ -56,14 +59,13 @@ class Command {
 	 Command(t_player_number s_player_number);
 
 	 //Set-функции
-	 void setPlayerNumber(t_player_number s_player_number);
+	 void setPlayerNumber(t_player_number s_player_number);   
 
 	 //Get-функции
 	 t_player_number getPlayerNumber();
 
  private:
-	 t_player_number player_number;
-
+   t_player_number player_number;   
 };
 
 /*Команда с направлением */
@@ -93,4 +95,23 @@ class CommandMove : public CommandWithDirection {
 /*Команда атаки */
 class CommandAttack : public Command {
 
+};
+
+/*Команды от GUI*/
+class CommandFromGUI
+{
+public:
+  CommandFromGUI();
+  ~CommandFromGUI();
+
+  //Set-Function
+  void setPlayerNumber(t_player_number s_player_number);
+  void setFromGUICommand(GUICommand s_gui_command);
+
+  //Get-Function
+  t_player_number getPlayerNumber();
+  GUICommand getGUICommand();
+private:
+  t_player_number _playerNumber;
+  GUICommand _guiCommand;
 };
