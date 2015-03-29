@@ -64,6 +64,6 @@ namespace player
 
 		void Move(CommandMove command);
 
-		//~BULLET();
+		~BULLET(){};
 	};
 };

@@ -48,7 +48,15 @@ bool PLAYER::RecieveDamage(hit_points dmg)
 
 void PLAYER::Move(CommandMove command, MAP* map)
 {
+	PositionCoord newPosition;
 
+	if ()
+
+	if (map->IsEmpty(newPosition))
+	{
+		player_pos.x = newPosition.x;
+		player_pos.y = newPosition.y;
+	}
 }
 
 void PLAYER::Turn(CommandWithDirection command)

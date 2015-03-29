@@ -9,7 +9,7 @@
 typedef unsigned int t_player_number;
 
 /*Очки жизни игрока*/
- typedef unsigned int hit_points;
+ typedef int hit_points;
 
 /* Положение на карте */
 struct PositionCoord {
