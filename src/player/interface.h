@@ -36,11 +36,11 @@ namespace player
 		//Танк получает урон. 0 - hp еще осталось, 1 - нет     (вместо проверки hp на равенство 0)
 		bool RecieveDamage(hit_points);
 
-		void Move(CommandMove command, MAP* map);
+		void Move(MAP*);
 
-		void Turn(CommandWithDirection);
+		void Turn(Direction);
 
-		shared_ptr<class BULLET> Attack(CommandAttack command);
+		shared_ptr<class BULLET> Attack();
 	};
 
 
@@ -62,7 +62,7 @@ namespace player
 
 		hit_points getDamage();
 
-		void Move(CommandMove command);
+		void Move();
 
 		~BULLET(){};
 	};

@@ -87,7 +87,13 @@ class CommandWithDirection : public Command {
 
 
 /*Команда движения */
-class CommandMove : public CommandWithDirection {
+class CommandMove : public Command {
+
+
+};
+
+/*Команда поворота*/
+class CommandTurn : public CommandWithDirection {
 
 
 };

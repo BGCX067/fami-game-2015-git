@@ -25,7 +25,29 @@ hit_points BULLET::getDamage()
 	return damage;
 }
 
-void BULLET::Move(CommandMove command)
+void BULLET::Move()
 {
-
+	switch (bullet_direction)
+	{
+	case Direction::Left:
+	{
+		bullet_pos = PositionCoord(bullet_pos.x - 1, bullet_pos.y);
+		break;
+	}
+	case Direction::Right:
+	{
+		bullet_pos = PositionCoord(bullet_pos.x + 1, bullet_pos.y);
+		break;
+	}
+	case Direction::Up:
+	{
+		bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y + 1);
+		break;
+	}
+	case Direction::Down:
+	{
+		bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y - 1);
+		break;
+	}
+	}
 }
