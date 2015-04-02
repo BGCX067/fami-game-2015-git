@@ -46,7 +46,7 @@ bool PLAYER::RecieveDamage(hit_points dmg)
 	else return 0;
 }
 
-void PLAYER::Move(MAP* map)
+void PLAYER::Move(_map::MAP* map)
 {
 /*	PositionCoord newPosition, np0, np1, np2;
 	int s = (size - 1) / 2;
@@ -130,5 +130,5 @@ void PLAYER::Turn(Direction direction)
 
 shared_ptr<BULLET> PLAYER::Attack()
 {
-	return make_shared<BULLET>(new BULLET(player_id, player_pos/*+- (size-1)/2 */, player_direction, damage));
+	return make_shared<BULLET>(player_id, player_pos/*+- (size-1)/2 */, player_direction, damage);
 }

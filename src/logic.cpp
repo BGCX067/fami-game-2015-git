@@ -22,7 +22,7 @@ string Logic::getStatusForGUI(){
 void Logic::setCommandForPlayer(){
   //необходимы set-функции у класса PLAYER для установления новых параметров игрока и в последствии пули
 }
-void getNextCommandFromGUI(CommandFromGUI g_commandFromGUI){
+void Logic::getNextCommandFromGUI(CommandFromGUI g_commandFromGUI){
   _commandsFromGUI.push(g_commandFromGUI);
 }
 

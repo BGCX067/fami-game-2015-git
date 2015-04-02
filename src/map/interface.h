@@ -2,6 +2,7 @@
 #include <functional>
 #include <map>
 #include "../interface.h"
+#include <memory>
 /*
 Интерфейсы взаимодействия с системой игровой карты (MAP).
 */

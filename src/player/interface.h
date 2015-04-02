@@ -2,9 +2,8 @@
 
 #include "../interface.h"
 #include <memory>
-using namespace map;
 using namespace std;
-
+namespace _map{ class MAP; };
 /*
 Интерфейсы взаимодействия с системой управления игроком (PLAYER).
 */
@@ -36,7 +35,7 @@ namespace player
 		//Танк получает урон. 0 - hp еще осталось, 1 - нет     (вместо проверки hp на равенство 0)
 		bool RecieveDamage(hit_points);
 
-		void Move(MAP*);
+		void Move(_map::MAP*);
 
 		void Turn(Direction);
 
