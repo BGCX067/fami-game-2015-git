@@ -35,6 +35,12 @@ namespace map {
 			return false;		
 		}
 
+		virtual bool IsEmptyRow(int n, PositionCoord *p, Direction a)
+		{
+			return false;
+		}
+
+
 		virtual void EnumerateWallObjects(std::function<void(PositionCoord, std::shared_ptr<class WallOblect>) > fun)
 		{
 			for (auto& xi : Wall)
