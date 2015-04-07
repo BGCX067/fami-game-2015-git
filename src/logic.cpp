@@ -2,7 +2,7 @@
 
 using namespace logic;
 using namespace player;
-using namespace map;
+using namespace _map;
 
 Logic::Logic(){
   _gameStatus = "gameStatus";

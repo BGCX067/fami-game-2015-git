@@ -1,7 +1,8 @@
 #include "interface.h"
 
 using namespace player;
-using namespace map;
+
+#define BULLET_VELOCITY 2
 
 PLAYER::PLAYER(t_player_number id, PositionCoord startPosition, Direction startDirection, hit_points startHP, hit_points startDamage, unsigned int size_)
 {
@@ -48,79 +49,48 @@ bool PLAYER::RecieveDamage(hit_points dmg)
 
 void PLAYER::Move(_map::MAP* map)
 {
-/*	PositionCoord newPosition, np0, np1, np2;
+	PositionCoord newPosition, checkPosition;
+	Direction d;
 	int s = (size - 1) / 2;
 
 	switch (player_direction)
 	{
 	case Direction::Left:
 		{
-			np0.x = player_pos.x - s - 1;
-			np0.y = player_pos.y - 1;
-
-			np1.x = np0.x;
-			np1.y = np0.y + 1;
-
-			np2.x = np1.x;
-			np2.y = np1.y + 1;
-
+			checkPosition = PositionCoord(player_pos.x - s - 1, player_pos.y);
 			newPosition = PositionCoord(player_pos.x - 1, player_pos.y);
-
+			d = Direction::Up;
 			break;
 		}
 	case Direction::Right:
 		{
-			np0.x = player_pos.x + s + 1;
-			np0.y = player_pos.y - 1;
 
-			np1.x = np0.x;
-			np1.y = np0.y + 1;
-
-			np2.x = np1.x;
-			np2.y = np1.y + 1;
-
+			checkPosition = PositionCoord(player_pos.x + s + 1, player_pos.y);
 			newPosition = PositionCoord(player_pos.x + 1, player_pos.y);
-
+			d = Direction::Up;
 			break;
 		}
 	case Direction::Down:
 		{
-			np0.x = player_pos.x - 1;
-			np0.y = player_pos.y - s - 1;
-
-			np1.x = np0.x + 1;
-			np1.y = np0.y;
-
-			np2.x = np1.x + 1;
-			np2.y = np1.y;
-
+			checkPosition = PositionCoord(player_pos.x, player_pos.y - s - 1);
 			newPosition = PositionCoord(player_pos.x, player_pos.y - 1);
-
+			d = Direction::Right;
 			break;
 		}
 	case Direction::Up:
 		{
-			np0.x = player_pos.x - 1;
-			np0.y = player_pos.y + s + 1;
-
-			np1.x = np0.x + 1;
-			np1.y = np0.y;
-
-			np2.x = np1.x + 1;
-			np2.y = np1.y;
-
+			checkPosition = PositionCoord(player_pos.x, player_pos.y +  s + 1);
 			newPosition = PositionCoord(player_pos.x, player_pos.y + 1);
-
+			d = Direction::Right;
 			break;
 		}
 	}
 
-	if (map->IsEmpty(np0) && map->IsEmpty(np1) && map->IsEmpty(np2))
+	if (map->IsEmptyRow(size, checkPosition, d))
 	{
 		player_pos.x = newPosition.x;
 		player_pos.y = newPosition.y;
-	}*/
-	//IzEmptyRow()
+	}
 }
 
 void PLAYER::Turn(Direction direction)
@@ -130,5 +100,31 @@ void PLAYER::Turn(Direction direction)
 
 shared_ptr<BULLET> PLAYER::Attack()
 {
-	return make_shared<BULLET>(player_id, player_pos/*+- (size-1)/2 */, player_direction, damage);
+	PositionCoord start_pos;
+	int s = (size - 1) / 2;
+
+	switch (player_direction)
+	{
+	case Direction::Left:
+	{
+		start_pos = PositionCoord(start_pos.x - s - 1, start_pos.y);
+		break;
+	}
+	case Direction::Right:
+	{
+		start_pos = PositionCoord(start_pos.x + s + 1, start_pos.y);
+		break;
+	}
+	case Direction::Up:
+	{
+		start_pos = PositionCoord(start_pos.x, start_pos.y + s + 1);
+		break;
+	}
+	case Direction::Down:
+	{
+		start_pos = PositionCoord(start_pos.x, start_pos.y - s - 1);
+		break;
+	}
+	}
+	return make_shared<BULLET>(player_id, start_pos, player_direction, damage, size, BULLET_VELOCITY);
 }

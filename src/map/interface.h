@@ -7,11 +7,12 @@
 Интерфейсы взаимодействия с системой игровой карты (MAP).
 */
 
-namespace map {
+namespace _map {
 	class MAP
 	{
 	public:
-		virtual bool IsEmpty(PositionCoord coord) = 0; //Necessary for tank moving
+		virtual bool IsEmpty(PositionCoord coord) = 0;
+		virtual bool IsEmptyRow(int, PositionCoord, Direction) = 0; //Necessary for tank moving!!!
 		virtual void EnumerateWallObjects(std::function<void(PositionCoord, std::shared_ptr<class WallOblect>)> fun) = 0;
 		virtual void EnumeratePlayerObjects(std::function<void(PositionCoord, std::shared_ptr<class Player>)> fun) = 0;
 		virtual void EnumerateBulletObjects(std::function<void(PositionCoord, std::shared_ptr<class Bullet>)> fun) = 0;
@@ -35,7 +36,8 @@ namespace map {
 			return false;		
 		}
 
-		virtual bool IsEmptyRow(int n, PositionCoord *p, Direction a)
+		//Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
+		virtual bool IsEmptyRow(int n, PositionCoord coord, Direction a)
 		{
 			return false;
 		}

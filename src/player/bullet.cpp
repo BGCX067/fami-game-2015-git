@@ -2,12 +2,14 @@
 
 using namespace player;
 
-BULLET::BULLET(t_player_number id, PositionCoord startPosition, Direction startDirection, hit_points dmg)
+BULLET::BULLET(t_player_number id, PositionCoord startPosition, Direction startDirection, hit_points dmg, unsigned int dmgsize_, double v)
 {
 	player_id = id;
 	bullet_pos = startPosition;
 	bullet_direction = startDirection;
 	damage = dmg;
+	dmgsize = dmgsize_;
+	velocity = v;
 }
 
 t_player_number BULLET::getPlayerId()
@@ -23,6 +25,16 @@ PositionCoord BULLET::getCurrentPosition()
 hit_points BULLET::getDamage()
 {
 	return damage;
+}
+
+unsigned int BULLET::getDmgSize()
+{
+	return dmgsize;
+}
+
+double BULLET::getVelocity()
+{
+	return velocity;
 }
 
 void BULLET::Move()

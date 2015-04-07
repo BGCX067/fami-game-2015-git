@@ -4,6 +4,7 @@
 #include <memory>
 using namespace std;
 namespace _map{ class MAP; };
+
 /*
 Интерфейсы взаимодействия с системой управления игроком (PLAYER).
 */
@@ -48,18 +49,22 @@ namespace player
 		t_player_number player_id;
 		PositionCoord bullet_pos;
 		Direction bullet_direction;
-		hit_points damage;
-
-		//double velocity;
+		hit_points damage;	
+		unsigned int dmgsize;	//Пуля будет уничтожать ряд квадратиков, перпендикулярно направлению движения
+		double velocity;
 
 	public:
-		BULLET(t_player_number, PositionCoord, Direction, hit_points);
+		BULLET(t_player_number, PositionCoord, Direction, hit_points, unsigned int, double);
 
 		t_player_number getPlayerId();
 
 		PositionCoord getCurrentPosition();
 
 		hit_points getDamage();
+
+		unsigned int getDmgSize();
+
+		double getVelocity();
 
 		void Move();
 
