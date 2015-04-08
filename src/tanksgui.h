@@ -13,7 +13,7 @@ struct gui_cmd
     {
         player_id = 1;
         cmd_code = 0;
-        desc = 'default';
+        desc = "default";
     };
 
     int player_id; // номер команды
