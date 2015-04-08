@@ -3,6 +3,7 @@
 #include "../interface.h"
 #include <string>
 #include <queue>
+#include <map/interface.h>
 using namespace std;
 /*
 Интерфейсы взаимодействия с системой игровой логики (LOGIC).
@@ -22,7 +23,7 @@ namespace logic {
     ~Logic();
 
     string getStatusForGUI(); //gui отдаем статус игры
-    void getNextCommandFromGUI(CommandFromGUI g_commandFromGUI); //мы забираем команду из gui
+    void setNextCommandFromGUI(CommandFromGUI g_commandFromGUI); //суда складывает команды gui
     void run(); //запуск логики, должна запускать gui    
   private:
     string _gameStatus; //текущий статус игры

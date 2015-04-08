@@ -45,7 +45,7 @@ struct PositionCoord {
 /*Направление движения/стельбы*/
 enum class Direction {Left, Right, Up, Down};
 // Команды, которые приходят от GUI в логику. 
-enum class GUICommand {Left, Right, Up, Down, Atack}; 
+enum class GUICommand {Left, Right, Up, Down, Atack, START, PAUSE, CONTINUE};
 
 // ========================================================================
 // ======================== Классы команд =================================

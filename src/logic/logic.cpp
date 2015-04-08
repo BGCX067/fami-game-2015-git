@@ -11,10 +11,10 @@ std::string Logic::getStatusForGUI()
     ///     "GAME_CONTINUE"
     ///     "PLAYER_%INTEGER_WIN" %INTEGER is unsigned natural number
     ///     "GAME_PAUSE"
-    return gameStatus;
+    return _gameStatus;
 }
 
-std::string Logic::getNextCommandFromGUI()
+void Logic::setNextCommandFromGUI(CommandFromGUI g_commandFromGUI)
 {
     /// @private
     /// return std::string
@@ -33,44 +33,45 @@ std::string Logic::getNextCommandFromGUI()
     ///     "CONTINUE" after pause
 
     //тут возможно нужен будет мьютекс
-    if(!commandsFromGUI.empty())
-        return commandsFromGUI.pop();
-    return std::string("NONE"); //комманд нет
+    g_commandFromGUI.getGUICommand();
+    if(!_commandsFromGUI.empty())
+        _commandsFromGUI.push(g_commandFromGUI);
 }
 
 void Logic::run()
 {
     //посмотрим что нам дало gui
-    std::string guiCoomand = getNextCommandFromGUI();
-    switch(guiCoomand){
-    case "NONE":
+    shared_ptr<CommandFromGUI> guiCoomand(&(_commandsFromGUI.back()));
+    _commandsFromGUI.pop();
+    switch(guiCoomand->getGUICommand()){
+    case GUICommand::START:
         break;
-    case "START":
+    case GUICommand::PAUSE:
         break;
-    case "PAUSE":
+    case GUICommand::CONTINUE:
         break;
-    case "CONTINUE":
-        break;
-    case "PLAYER_1_UP":
+    case GUICommand::Up:
         //example
-        PositionCoord pos1 = player1.getCurrentPosition();
+        /*PositionCoord pos1 = player1.getCurrentPosition();
         pos1.y += 1;
         if(player1.getCurrentDirection() != UP)
             player1.Turn(UP);
         if(getBlockFromMap(pos1).isEmpty())
-            player1.Move(pos1);
+            player1.Move(pos1);*/
         break;
-    case "PLAYER_1_SHOOT":
-        PositionCoord pos1 = player1.getCurrentPosition();
+    case GUICommand::Atack:
+        /*PositionCoord pos1 = player1.getCurrentPosition();
         Direction direct = player1.getCurrentDirection();
         map.insertBullet(player::BULLET(player1.getPlayerId(), pos1, direct, 1));
+        */
         break;
     default:
-        continue;
+        break;
     }
 
     //обработаем разрушения от снарядов
-    for(auto bullet = map.Bullets.begin(); bullet != map.Bullets.end(); ++bullet) {
+    /*_map::MapExample currMap;
+    for(auto bullet = currMap.Bullets.begin(); bullet != currMap.Bullets.end(); ++bullet) {
         PositionCoord bulletDemandPosition = bullet.getCurrentPosition(); //позиция на которой окажется снаряд
         switch(bullet.getCurrentDirection()) {
         case UP:
@@ -105,6 +106,6 @@ void Logic::run()
         case ENDOFMAP: //конец карты
             map.Bullets.erase(bullet);
             break;
-    }
+    }*/
 
 }
