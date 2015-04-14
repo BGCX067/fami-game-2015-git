@@ -1,12 +1,16 @@
 #include "tanksgui.h"
 #include "ui_tanksgui.h"
 #include <QKeyEvent>
+#include <QShowEvent>
+#include <QFileDialog>
+#include <QResizeEvent>
 
 TanksGUI::TanksGUI(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::TanksGUI)
 {
     ui->setupUi(this);
+	setFocus();
 }
 
 TanksGUI::~TanksGUI()
@@ -14,10 +18,15 @@ TanksGUI::~TanksGUI()
     delete ui;
 }
 
+void TanksGUI::resizeEvent(QResizeEvent * resizeEvent)
+{
+    int sizeh = this->ui->graphicsView->height();
+    int sizew = this->ui->graphicsView->width();
+    printf("%d %d \n", sizeh, sizew);
+}
+
 void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
 {
-    setFocus();
-
     switch(keyEvent->key())
     {
         case Qt::Key_W :{
@@ -114,4 +123,11 @@ void TanksGUI::on_pushButton_3_clicked()
 {
     //printf("BUTTON_ABOUT!!!\n");
     guicmd.player_id = 0;   guicmd.cmd_code = 12;    guicmd.desc = "but_about";
+}
+
+void MainWindow::on_actionDownload_Map_triggered()
+{
+   QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*)"));
+   //Отправить событие Карте!
+   printf("CANT TOUCH THIS!!!\n");
 }

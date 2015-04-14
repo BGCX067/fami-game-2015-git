@@ -42,6 +42,8 @@ private:
           void on_pushButton_clicked();
           void on_pushButton_2_clicked();
           void on_pushButton_3_clicked();
+		  void on_actionDownload_Map_triggered();
+          void resizeEvent(QResizeEvent *resizeEvent);
 };
 
 #endif // TANKSGUI_H
