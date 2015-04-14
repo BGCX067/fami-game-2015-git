@@ -1,7 +1,7 @@
 #include "general_types.h"
 
 
-/*Базовый класс*/
+/*Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ*/
 Command::Command() {
 	player_number = 0;  
 }
@@ -20,7 +20,7 @@ t_player_number Command::getPlayerNumber() {
 
 
 
-/*Команда с направлением */
+/*РљРѕРјР°РЅРґР° СЃ РЅР°РїСЂР°РІР»РµРЅРёРµРј */
 CommandWithDirection::CommandWithDirection() : 
 	Command() {
 	//command_direction = Direction::Forward;
@@ -39,7 +39,7 @@ Direction CommandWithDirection::getCommandDirection() {
 	return command_direction;
 }
 
-/*Команды от GUI*/
+/*РљРћРјР°РЅРґС‹ РѕС‚ GUI*/
 CommandFromGUI::CommandFromGUI(){
   _playerNumber = 0;
   _guiCommand = GUICommand();

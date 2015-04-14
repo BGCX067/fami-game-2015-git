@@ -1,9 +1,8 @@
 #pragma once
 
-#include "../interface.h"
 #include <string>
 #include <queue>
-#include "map/interface.h"
+#include "../map/interface.h"
 using namespace std;
 /*
 Интерфейсы взаимодействия с системой игровой логики (LOGIC).

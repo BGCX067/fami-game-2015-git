@@ -1,5 +1,5 @@
-#include "logic/interface.h"
-#include "player/interface.h"
+#include "../logic/interface.h"
+#include "../player/interface.h"
 
 using namespace logic;
 

@@ -1,63 +1,39 @@
 #pragma once
 #include <functional>
 #include <map>
-#include "../interface.h"
+#include "../general_types.h"
 #include <memory>
+
+using namespace std;
+
 /*
 Интерфейсы взаимодействия с системой игровой карты (MAP).
 */
 
-namespace _map {
-	class MAP
-	{
-	public:
-		virtual bool IsEmpty(PositionCoord coord) = 0;
-		virtual bool IsEmptyRow(int, PositionCoord, Direction) = 0; //Necessary for tank moving!!!
-		virtual void EnumerateWallObjects(std::function<void(PositionCoord, std::shared_ptr<class WallOblect>)> fun) = 0;
-		virtual void EnumeratePlayerObjects(std::function<void(PositionCoord, std::shared_ptr<class Player>)> fun) = 0;
-		virtual void EnumerateBulletObjects(std::function<void(PositionCoord, std::shared_ptr<class Bullet>)> fun) = 0;
-	};
-	
-	class MapExample:public MAP
-	{
-		int sizex, sizey;
-		std::map<int, std::map<int, std::shared_ptr<class WallOblect> > > Wall;
-		std::map<int, std::map<int, std::shared_ptr<class Player> > > Players;
-		std::map<int, std::map<int, std::shared_ptr<class Bullet> > > Bullets;
+namespace tmap {
+    class TMap {
+        int sizex, sizey;
+        map<int, map<int, shared_ptr<class Wall> > > walls;
+        map<int, map<int, shared_ptr<class Player> > > players;
+        map<int, map<int, shared_ptr<class Bullet> > > bullets;
+    public:
+        bool init(int level);
+        bool clean();
 
-	public:
+        bool isEmpty(PositionCoord coord);
+        //Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
+        bool isEmptyRow(int n, PositionCoord coord, Direction a);
 
-		virtual bool IsEmpty(PositionCoord coord)
-		{
-			auto finded = Wall.find(coord.x);
-			if (finded == Wall.end())return true;
-			auto findedy = finded->second.find(coord.y);
-			if (findedy == finded->second.end())return true;
-			return false;		
-		}
+        void forEachWall(function<void(PositionCoord, shared_ptr<class Wall>) > f);
+        void forEachPlayer(function<void(PositionCoord, shared_ptr<class Player>) > f);
+        void forEachBullet(function<void(PositionCoord, shared_ptr<class Bullet>) > f);
 
-		//Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
-		virtual bool IsEmptyRow(int n, PositionCoord coord, Direction a)
-		{
-			return false;
-		}
+        bool createWall(PositionCoord);
+        bool createPlayer(PositionCoord);
+        bool createBullet(PositionCoord);
 
-
-		virtual void EnumerateWallObjects(std::function<void(PositionCoord, std::shared_ptr<class WallOblect>) > fun)
-		{
-			for (auto& xi : Wall)
-				for (auto&yi : xi.second)fun(PositionCoord(xi.first, yi.first), yi.second);
-		}
-
-		virtual void EnumeratePlayerObjects(std::function<void(PositionCoord, std::shared_ptr<class Player>) > fun)
-		{
-			throw std::logic_error("The method or operation is not implemented.");
-		}
-
-		virtual void EnumerateBulletObjects(std::function<void(PositionCoord, std::shared_ptr<class Bullet>) > fun)
-		{
-			throw std::logic_error("The method or operation is not implemented.");
-		}
-
-	};
+        bool deleteWall(PositionCoord);
+        bool deletePlayer(PositionCoord);
+        bool deleteBullet(PositionCoord);
+    };
 };

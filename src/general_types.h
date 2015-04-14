@@ -1,27 +1,27 @@
 #pragma once
 
 /*
-Описание типов, общих для нескольких подсистем
+РћРїРёСЃР°РЅРёРµ С‚РёРїРѕРІ, РѕР±С‰РёС… РґР»СЏ РЅРµСЃРєРѕР»СЊРєРёС… РїРѕРґСЃРёСЃС‚РµРј
 */
 
 
-/*Номер игрока*/
+/*РќРѕРјРµСЂ РёРіСЂРѕРєР°*/
 typedef unsigned int t_player_number;
 
-/*Очки жизни игрока*/
+/*РћС‡РєРё Р¶РёР·РЅРё РёРіСЂРѕРєР°*/
  typedef int hit_points;
 
-/* Положение на карте */
+/* РџРѕР»РѕР¶РµРЅРёРµ РЅР° РєР°СЂС‚Рµ */
 struct PositionCoord {
-	int x;
-	int y;
+    int x;
+    int y;
 
-	//Конструктор
-  PositionCoord(){};
-  PositionCoord(int X, int Y) {
-		x = X;
-		y = Y;
-	}
+    //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+    PositionCoord(){};
+    PositionCoord(int X, int Y) {
+        x = X;
+        y = Y;
+    }
 
     PositionCoord(const PositionCoord & f) {
         x = f.x;
@@ -42,82 +42,91 @@ struct PositionCoord {
     }
 };
 
-/*Направление движения/стельбы*/
+/*РќР°РїСЂР°РІР»РµРЅРёРµ РґРІРёР¶РµРЅРёСЏ/СЃС‚РµР»СЊР±С‹*/
 enum class Direction {Left, Right, Up, Down};
-// Команды, которые приходят от GUI в логику. 
+
+// РљРѕРјР°РЅРґС‹, РєРѕС‚РѕСЂС‹Рµ РїСЂРёС…РѕРґСЏС‚ РѕС‚ GUI РІ Р»РѕРіРёРєСѓ.
 enum class GUICommand {Left, Right, Up, Down, Atack, START, PAUSE, CONTINUE, EXIT, ABOUT};
 
+class Wall {
+public:
+    Wall() {};
+    ~Wall() {};
+};
+
+class Player {
+public:
+    Player() {};
+    ~Player() {};
+};
+
+class Bullet {
+public:
+    Bullet() {};
+    ~Bullet() {};
+};
+
 // ========================================================================
-// ======================== Классы команд =================================
+// ======================== РљР»Р°СЃСЃС‹ РєРѕРјР°РЅРґ =================================
 // ========================================================================
 
-/*Базовый класс*/
+/*Р‘Р°Р·РѕРІС‹Р№ РєР»Р°СЃСЃ*/
 class Command {
  public:
-	 //Конструкторы
-	 Command();
-	 Command(t_player_number s_player_number);
+     //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹
+     Command();
+     Command(t_player_number s_player_number);
 
-	 //Set-функции
-	 void setPlayerNumber(t_player_number s_player_number);   
+     //Set-С„СѓРЅРєС†РёРё
+     void setPlayerNumber(t_player_number s_player_number);
 
-	 //Get-функции
-	 t_player_number getPlayerNumber();
+     //Get-С„СѓРЅРєС†РёРё
+     t_player_number getPlayerNumber();
 
  private:
-   t_player_number player_number;   
+   t_player_number player_number;
 };
 
-/*Команда с направлением */
+/*РљРѕРјР°РЅРґР° СЃ РЅР°РїСЂР°РІР»РµРЅРёРµРј */
 class CommandWithDirection : public Command {
  public:
-	 //Конструкторы
-	 CommandWithDirection();
-	 CommandWithDirection(t_player_number s_player_number, Direction s_command_direction);
+     CommandWithDirection();
+     CommandWithDirection(t_player_number s_player_number, Direction s_command_direction);
 
-	 //Set-функции
-	 void setCommandDirection(Direction s_command_direction);
-
-	//Get-функции
-	 Direction getCommandDirection();
+     void setCommandDirection(Direction s_command_direction);
+     Direction getCommandDirection();
 
  private:
-	 Direction command_direction;
+     Direction command_direction;
 };
 
 
-/*Команда движения */
 class CommandMove : public Command {
 
 
 };
 
-/*Команда поворота*/
 class CommandTurn : public CommandWithDirection {
 
 
 };
 
-/*Команда атаки */
 class CommandAttack : public Command {
 
 };
 
-/*Команды от GUI*/
 class CommandFromGUI
 {
 public:
-  CommandFromGUI();
-  ~CommandFromGUI();
+    CommandFromGUI();
+    ~CommandFromGUI();
 
-  //Set-Function
-  void setPlayerNumber(t_player_number s_player_number);
-  void setFromGUICommand(GUICommand s_gui_command);
+    void setPlayerNumber(t_player_number s_player_number);
+    void setFromGUICommand(GUICommand s_gui_command);
 
-  //Get-Function
-  t_player_number getPlayerNumber();
-  GUICommand getGUICommand();
+    t_player_number getPlayerNumber();
+    GUICommand getGUICommand();
 private:
-  t_player_number _playerNumber;
-  GUICommand _guiCommand;
+    t_player_number _playerNumber;
+    GUICommand _guiCommand;
 };
