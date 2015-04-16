@@ -48,6 +48,7 @@ void graphicManager::clear()
 
 void graphicManager::initializeGL()
 {
+    qDebug() << this->height() << " " <<  this->width();
     initGL(this->height() , this->width());
 }
 

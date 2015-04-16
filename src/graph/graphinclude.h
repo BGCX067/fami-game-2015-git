@@ -16,8 +16,8 @@ const float PI = 3.14159265;
 #include <QImage>
 
 //OpenGL
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <QtOpenGL>
+//#include <GL/glu.h>
 
 //For computation
 #include <string>

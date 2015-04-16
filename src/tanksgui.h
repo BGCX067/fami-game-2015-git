@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <string>
+#include "interface.h"
 
 using namespace std;
 
@@ -13,12 +14,12 @@ struct gui_cmd
     {
         player_id = 1;
         cmd_code = 0;
-        desc = "default";
+      //  desc = "default";
     };
 
     int player_id; // номер команды
     int cmd_code; // код команды
-    string desc; // описание команды
+    GUICommand desc; // описание команды
 };
 
 namespace Ui {

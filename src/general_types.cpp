@@ -39,7 +39,7 @@ Direction CommandWithDirection::getCommandDirection() {
 	return command_direction;
 }
 
-/*КОманды от GUI*/
+/*Команды от GUI*/
 CommandFromGUI::CommandFromGUI(){
   _playerNumber = 0;
   _guiCommand = GUICommand();

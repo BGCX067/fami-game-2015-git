@@ -45,7 +45,7 @@ bool sprite::load(const char *filename)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //Beauty grafon
 
     if(surf->hasAlphaChannel())
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_RGBA, surf->convertToFormat(QImage::Format_RGBA8888).bits());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_RGBA, surf->convertToFormat(QImage::Format_RGB888).bits());
     else
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, surf->convertToFormat(QImage::Format_RGB888).bits());
 
