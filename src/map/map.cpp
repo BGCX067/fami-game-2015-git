@@ -50,7 +50,7 @@ void TMap::forEachBullet(function<void(PositionCoord, shared_ptr<class Bullet>) 
 }
 
 bool TMap::createWall(PositionCoord coord) {
-    auto& wallsX = walls.find(coord.x);
+    const auto& wallsX = walls.find(coord.x);
     if (wallsX == walls.end())return true;
     auto& wallsY = wallsX->second;
     if (wallsY.find(coord.y) == wallsY.end()) {
@@ -61,7 +61,7 @@ bool TMap::createWall(PositionCoord coord) {
 }
 
 bool TMap::createPlayer(PositionCoord coord) {
-    auto& playersX = players.find(coord.x);
+    const auto& playersX = players.find(coord.x);
     if (playersX == players.end())return true;
     auto& playersY = playersX->second;
     if (playersY.find(coord.y) == playersY.end()) {
@@ -72,7 +72,7 @@ bool TMap::createPlayer(PositionCoord coord) {
 }
 
 bool TMap::createBullet(PositionCoord coord) {
-    auto& bulletsX = bullets.find(coord.x);
+    const auto& bulletsX = bullets.find(coord.x);
     if (bulletsX == bullets.end())return true;
     auto& bulletsY = bulletsX->second;
     if (bulletsY.find(coord.y) == bulletsY.end()) {
@@ -83,7 +83,7 @@ bool TMap::createBullet(PositionCoord coord) {
 }
 
 bool TMap::deleteWall(PositionCoord coord) {
-    auto& wallsX = walls.find(coord.x);
+    const auto& wallsX = walls.find(coord.x);
     if (wallsX == walls.end())return true;
     auto& wallsY = wallsX->second;
     if (wallsY.find(coord.y) != wallsY.end()) {
@@ -94,7 +94,7 @@ bool TMap::deleteWall(PositionCoord coord) {
 }
 
 bool TMap::deletePlayer(PositionCoord coord) {
-    auto& playersX = players.find(coord.x);
+    const auto& playersX = players.find(coord.x);
     if (playersX == players.end())return true;
     auto& playersY = playersX->second;
     if (playersY.find(coord.y) != playersY.end()) {
@@ -105,7 +105,7 @@ bool TMap::deletePlayer(PositionCoord coord) {
 }
 
 bool TMap::deleteBullet(PositionCoord coord) {
-    auto& bulletsX = bullets.find(coord.x);
+    const auto& bulletsX = bullets.find(coord.x);
     if (bulletsX == bullets.end())return true;
     auto& bulletsY = bulletsX->second;
     if (bulletsY.find(coord.y) != bulletsY.end()) {

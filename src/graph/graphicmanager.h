@@ -7,13 +7,13 @@
 #include "map/interface.h"
 #include <QGLWidget>
 
-class graphicManager : public QGLWidget, public graph::graphic
+class graphicManager : public QGLWidget, public graph::graphicManager
 {
 public:
     explicit graphicManager(QWidget *parent);
     ~graphicManager();
 
-    void init(_map::MAP *mapObject);
+    void init(tmap::TMap *mapObject);
     void render();
     void free();
 
@@ -53,7 +53,7 @@ private:
 
     float viewportScaleFactor = 1;
     GLuint currentSprite;
-    _map::MAP *_map;
+    tmap::TMap *_map;
 };
 
 #endif // GRAPHICMANAGER_H

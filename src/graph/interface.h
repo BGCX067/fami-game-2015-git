@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../interface.h"
+#include "../map/interface.h"
 
 /*
 Интерфейсы взаимодействия с системой графики (GRAPH).

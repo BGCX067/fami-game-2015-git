@@ -86,7 +86,7 @@ void PLAYER::Move(tmap::TMap* map)
         }
     }
 
-    if (map->IsEmptyRow(size, checkPosition, d))
+    if (map->isEmptyRow(size, checkPosition, d))
     {
         player_pos.x = newPosition.x;
         player_pos.y = newPosition.y;

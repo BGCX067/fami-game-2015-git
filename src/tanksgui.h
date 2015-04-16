@@ -4,7 +4,9 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <string>
-#include "interface.h"
+
+#include "gui/interface.h"
+#include "general_types.h"
 
 using namespace std;
 

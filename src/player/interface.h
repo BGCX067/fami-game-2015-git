@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include "../general_types.h"
+#include "../map/interface.h"
 using namespace std;
 
 /*

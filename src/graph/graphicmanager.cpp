@@ -25,7 +25,7 @@ void graphicManager::drawBullet(PositionCoord, std::shared_ptr<Bullet>)
     drawRect(70.0, 20.0, 10.0, 10.0, 0.5, 0.5, 0.5, 1.0);
 }
 
-void graphicManager::init(_map::MAP *mapObject)
+void graphicManager::init(tmap::TMap *mapObject)
 {
     _map = mapObject;
     initializeGL();

@@ -19,6 +19,7 @@ SOURCES += main.cpp\
         tanksgui.cpp \
     general_types.cpp \
     logic/logic.cpp \
+    map/map.cpp \
     player/player.cpp \
     player/bullet.cpp \
     graph/graphicmanager.cpp \
@@ -33,7 +34,6 @@ HEADERS  += tanksgui.h \
     map/interface.h \
     player/interface.h \
     general_types.h \
-    interface.h \
     graph/graphicmanager.h \
     graph/sprite.h \
     graph/spritemanager.h \
