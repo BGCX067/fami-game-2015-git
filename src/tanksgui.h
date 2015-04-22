@@ -7,6 +7,7 @@
 
 #include "gui/interface.h"
 #include "general_types.h"
+#include "logic/interface.h"
 
 using namespace std;
 
@@ -37,6 +38,7 @@ public:
     ~TanksGUI();
 
 private:
+    shared_ptr<logic::Logic> LogicModule; //теперь здесь живет экземплр логики
     Ui::TanksGUI *ui;
     gui_cmd guicmd;
     private slots:

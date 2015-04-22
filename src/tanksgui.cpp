@@ -12,6 +12,9 @@ TanksGUI::TanksGUI(QWidget *parent) :
     ui->setupUi(this);
     ui->graphicsView->setGeometry(0, 0 , 775, 436);
 	setFocus();
+
+
+    LogicModule = shared_ptr<logic::Logic> (new logic::Logic);
 }
 
 TanksGUI::~TanksGUI()
@@ -35,6 +38,13 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_W!!!\n");
             guicmd.player_id = 1;   guicmd.cmd_code = 1;    guicmd.desc = GUICommand::Up;
             //Logic::getNextCommandFromGUI(guicmd);
+            //Команде gui: это тестовый пример того, как должны посылаться команды в логику
+            //сделайте так же и для других клавиш
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(1);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+            //===================================
             break;
         };
 

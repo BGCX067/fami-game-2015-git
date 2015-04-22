@@ -3,6 +3,16 @@
 
 using namespace logic;
 
+Logic::Logic()
+{
+
+}
+
+Logic::~Logic()
+{
+
+}
+
 std::string Logic::getStatusForGUI()
 {
     /// @public
@@ -33,9 +43,7 @@ void Logic::setNextCommandFromGUI(CommandFromGUI g_commandFromGUI)
     ///     "CONTINUE" after pause
 
     //тут возможно нужен будет мьютекс
-    g_commandFromGUI.getGUICommand();
-    if(!_commandsFromGUI.empty())
-        _commandsFromGUI.push(g_commandFromGUI);
+    _commandsFromGUI.push(g_commandFromGUI);
 }
 
 void Logic::run()
