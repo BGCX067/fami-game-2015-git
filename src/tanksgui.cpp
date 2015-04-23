@@ -45,7 +45,7 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //Команде gui: это тестовый пример того, как должны посылаться команды в логику
             //сделайте так же и для других клавиш
             CommandFromGUI testCommand;
-            testCommand.setPlayerNumber(1);
+            testCommand.setPlayerNumber(guicmd.player_id);
             testCommand.setFromGUICommand(guicmd.desc);
             LogicModule->setNextCommandFromGUI(testCommand);
             //===================================
@@ -56,6 +56,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_A!!!\n");
             guicmd.player_id = 1;   guicmd.cmd_code = 2;    guicmd.desc = GUICommand::Left;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -63,6 +68,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_S!!!\n");
             guicmd.player_id = 1;   guicmd.cmd_code = 3;    guicmd.desc = GUICommand::Down;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -70,6 +80,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_D!!!\n");
             guicmd.player_id = 1;   guicmd.cmd_code = 4;    guicmd.desc = GUICommand::Right;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -77,6 +92,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_FIRE_IN_THE_HOLE!!!\n");
             guicmd.player_id = 1;   guicmd.cmd_code = 10;    guicmd.desc = GUICommand::Atack;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -84,6 +104,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_LEFT!!!\n");
             guicmd.player_id = 2;   guicmd.cmd_code = 5;    guicmd.desc = GUICommand::Left;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -91,6 +116,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_UP!!!\n");
             guicmd.player_id = 2;   guicmd.cmd_code = 6;    guicmd.desc = GUICommand::Up;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -98,6 +128,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_RIGHT!!!\n");
             guicmd.player_id = 2;   guicmd.cmd_code = 7;    guicmd.desc = GUICommand::Right;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -105,6 +140,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("BUTTON_DOWN!!!\n");
             guicmd.player_id = 2;   guicmd.cmd_code = 8;    guicmd.desc = GUICommand::Down;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -112,6 +152,11 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             //printf("FIRE_IN_THE_HOLE!!!\n");
             guicmd.player_id = 2;   guicmd.cmd_code = 9;    guicmd.desc = GUICommand::Atack;
             //Logic::getNextCommandFromGUI(guicmd);
+            CommandFromGUI testCommand;
+            testCommand.setPlayerNumber(guicmd.player_id);
+            testCommand.setFromGUICommand(guicmd.desc);
+            LogicModule->setNextCommandFromGUI(testCommand);
+
             break;
         };
 
@@ -125,12 +170,21 @@ void TanksGUI::on_pushButton_clicked()
 {
    // printf("BUTTON_START!!!\n");
     guicmd.player_id = 0;   guicmd.cmd_code = 10;    guicmd.desc = GUICommand::START;
+    bool game_flag = 0;
     //Запуск таймера
     qDebug() << "BUTTON_START";
     // Создание таймера
     game_timer = new QTimer(this);
     connect(game_timer, SIGNAL(timeout()), this, SLOT(timer_event()));
     game_timer->start(10);
+    if (game_flag == 1)
+    {
+        CommandFromGUI testCommand;
+        testCommand.setPlayerNumber(guicmd.player_id);
+        testCommand.setFromGUICommand(guicmd.desc);
+        LogicModule->setNextCommandFromGUI(testCommand);
+    }
+
 }
 
 // Кнопка "Exit Game"
@@ -138,6 +192,12 @@ void TanksGUI::on_pushButton_2_clicked()
 {
     //printf("BUTTON_EXIT!!!\n");
     guicmd.player_id = 0;   guicmd.cmd_code = 11;    guicmd.desc = GUICommand::EXIT;
+
+    CommandFromGUI testCommand;
+    testCommand.setPlayerNumber(guicmd.player_id);
+    testCommand.setFromGUICommand(guicmd.desc);
+    LogicModule->setNextCommandFromGUI(testCommand);
+
 }
 
 // Кнопка "About"
@@ -145,6 +205,11 @@ void TanksGUI::on_pushButton_3_clicked()
 {
     //printf("BUTTON_ABOUT!!!\n");
     guicmd.player_id = 0;   guicmd.cmd_code = 12;    guicmd.desc = GUICommand::ABOUT;
+    CommandFromGUI testCommand;
+    testCommand.setPlayerNumber(guicmd.player_id);
+    testCommand.setFromGUICommand(guicmd.desc);
+    LogicModule->setNextCommandFromGUI(testCommand);
+
 }
 
 void TanksGUI::on_actionDownload_Map_triggered()

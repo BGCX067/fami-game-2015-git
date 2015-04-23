@@ -10,7 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = tanks
 
-CONFIG += C++14
+CONFIG += C++11
 
 TEMPLATE = app
 
