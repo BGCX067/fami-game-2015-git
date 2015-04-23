@@ -70,6 +70,8 @@ namespace player
 
         void Move();
 
+        Direction getDirection();
+
         ~BULLET(){};
     };
 };

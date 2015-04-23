@@ -40,6 +40,7 @@ public:
 
 private:
     shared_ptr<logic::Logic> LogicModule; //теперь здесь живет экземплр логики
+    shared_ptr<tmap::TMap> MapModule;
     Ui::TanksGUI *ui;
     gui_cmd guicmd;
     QTimer* game_timer;
