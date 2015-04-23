@@ -18,15 +18,16 @@ namespace logic {
   class Logic 
   {
   public:
-    Logic();
+    Logic(shared_ptr<tmap::TMap> map);
     ~Logic();
 
-    string getStatusForGUI(); //gui отдаем статус игры
-    void setNextCommandFromGUI(CommandFromGUI g_commandFromGUI); //суда складывает команды gui
-    void run(); //запуск логики, должна запускать gui    
+    LOGICCommand getStatusForGUI();                                 // Передача gui статуса игры
+    void setNextCommandFromGUI(CommandFromGUI g_commandFromGUI);    // Передача команд gui
+    void run();                                                     // Запуск логики по таймеру
   private:
-    string _gameStatus; //текущий статус игры
-    queue<CommandFromGUI> _commandsFromGUI; //очередь gui комманд
+    LOGICCommand _gameStatus;                                       // Текущий статус игры
+    queue<CommandFromGUI> _commandsFromGUI;                         // Очередь gui комманд
+    shared_ptr<tmap::TMap> _currentMap;
 
     void setCommandForPlayer(); //дать комманду игроку
     void updateMap(); //обновить карту после изменений

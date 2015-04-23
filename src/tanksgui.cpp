@@ -4,7 +4,7 @@
 #include <QShowEvent>
 #include <QFileDialog>
 #include <QResizeEvent>
-#include <qDebug>
+#include <QDebug>
 
 TanksGUI::TanksGUI(QWidget *parent) :
     QMainWindow(parent),
@@ -14,9 +14,10 @@ TanksGUI::TanksGUI(QWidget *parent) :
     ui->graphicsView->setGeometry(0, 0 , 775, 436);
 	setFocus();
 
-
+    // Инициализация карты(testing)
+    MapModule = make_shared<tmap::TMap>();
     // Инициализация логики
-    LogicModule = shared_ptr<logic::Logic> (new logic::Logic);
+    LogicModule = make_shared<logic::Logic>(MapModule);
 }
 
 TanksGUI::~TanksGUI()

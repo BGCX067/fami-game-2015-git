@@ -63,3 +63,8 @@ void BULLET::Move()
 	}
 	}
 }
+
+Direction BULLET::getDirection()
+{
+    return bullet_direction;
+}
