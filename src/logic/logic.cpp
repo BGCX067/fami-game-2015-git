@@ -1,5 +1,7 @@
 #include "../logic/interface.h"
 #include "../player/interface.h"
+#include <qDebug>
+
 
 using namespace logic;
 
@@ -50,6 +52,7 @@ void Logic::run()
 {
     //посмотрим что нам дало gui
     shared_ptr<CommandFromGUI> guiCoomand(&(_commandsFromGUI.back()));
+    qDebug() << "1";
     _commandsFromGUI.pop();
     switch(guiCoomand->getGUICommand()){
     case GUICommand::START:

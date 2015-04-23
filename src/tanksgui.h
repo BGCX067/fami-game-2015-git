@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsView>
+#include <QTimer>
 #include <string>
 
 #include "gui/interface.h"
@@ -41,6 +42,10 @@ private:
     shared_ptr<logic::Logic> LogicModule; //теперь здесь живет экземплр логики
     Ui::TanksGUI *ui;
     gui_cmd guicmd;
+    QTimer* game_timer;
+
+
+
     private slots:
           // Слот для обработки нажатий всех кнопок
           void keyPressEvent(QKeyEvent *keyEvent);
@@ -49,6 +54,8 @@ private:
           void on_pushButton_3_clicked();
 		  void on_actionDownload_Map_triggered();
           void resizeEvent(QResizeEvent *resizeEvent);
+          void timer_event();
+
 };
 
 #endif // TANKSGUI_H

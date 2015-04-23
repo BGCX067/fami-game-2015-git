@@ -13,6 +13,7 @@ bool TMap::clean() {
     players.clear();
     for(auto& m : bullets) m.second.clear();
     bullets.clear();
+    return true;
 }
 
 bool TMap::isEmpty(PositionCoord coord) {

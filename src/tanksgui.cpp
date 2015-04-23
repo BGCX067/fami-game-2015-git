@@ -4,6 +4,7 @@
 #include <QShowEvent>
 #include <QFileDialog>
 #include <QResizeEvent>
+#include <qDebug>
 
 TanksGUI::TanksGUI(QWidget *parent) :
     QMainWindow(parent),
@@ -14,11 +15,14 @@ TanksGUI::TanksGUI(QWidget *parent) :
 	setFocus();
 
 
+    // Инициализация логики
     LogicModule = shared_ptr<logic::Logic> (new logic::Logic);
 }
 
 TanksGUI::~TanksGUI()
 {
+    //Остановка таймера
+    game_timer->stop();
     delete ui;
 }
 
@@ -119,8 +123,14 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
 // Кнопка "Start Game"
 void TanksGUI::on_pushButton_clicked()
 {
-    //printf("BUTTON_START!!!\n");
+   // printf("BUTTON_START!!!\n");
     guicmd.player_id = 0;   guicmd.cmd_code = 10;    guicmd.desc = GUICommand::START;
+    //Запуск таймера
+    qDebug() << "BUTTON_START";
+    // Создание таймера
+    game_timer = new QTimer(this);
+    connect(game_timer, SIGNAL(timeout()), this, SLOT(timer_event()));
+    game_timer->start(10);
 }
 
 // Кнопка "Exit Game"
@@ -142,4 +152,10 @@ void TanksGUI::on_actionDownload_Map_triggered()
    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*)"));
    //Отправить событие Карте!
    printf("CANT TOUCH THIS!!!\n");
+}
+
+// Обработка событий по основному игровому таймеру
+void TanksGUI::timer_event() {
+    qDebug() << "Timer event";
+    LogicModule->run();
 }

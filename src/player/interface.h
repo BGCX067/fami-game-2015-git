@@ -17,8 +17,9 @@ namespace player
         PositionCoord player_pos;
         Direction player_direction;
         hit_points hp;
-        hit_points damage;
-        unsigned int size;
+        hit_points damage; //к удалению
+        unsigned int size; //к удалению
+        //player_type player_type_id;
 
     public:
         PLAYER(t_player_number, PositionCoord, Direction, hit_points, hit_points, unsigned int);
@@ -46,12 +47,13 @@ namespace player
 
     class BULLET
     {
-        t_player_number player_id;
+        t_player_number player_id; // заменить на PLAYER*
         PositionCoord bullet_pos;
         Direction bullet_direction;
-        hit_points damage;
-        unsigned int dmgsize;	//Пуля будет уничтожать ряд квадратиков, перпендикулярно направлению движения
-        double velocity;
+        hit_points damage;  //к удалению
+        unsigned int dmgsize; //к удалению	//Пуля будет уничтожать ряд квадратиков, перпендикулярно направлению движения
+        double velocity; //к удалению
+        //bullet_type bullet_type_id;
 
     public:
         BULLET(t_player_number, PositionCoord, Direction, hit_points, unsigned int, double);
