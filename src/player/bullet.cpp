@@ -2,14 +2,12 @@
 
 using namespace player;
 
-BULLET::BULLET(t_player_number id, PositionCoord startPosition, Direction startDirection, hit_points dmg, unsigned int dmgsize_, double v)
+BULLET::BULLET(t_player_number id, bullet_type bType, PositionCoord startPosition, Direction startDirection)
 {
 	player_id = id;
+	bullet_type_id = bType;
 	bullet_pos = startPosition;
 	bullet_direction = startDirection;
-	damage = dmg;
-	dmgsize = dmgsize_;
-	velocity = v;
 }
 
 t_player_number BULLET::getPlayerId()
@@ -17,24 +15,34 @@ t_player_number BULLET::getPlayerId()
 	return player_id;
 }
 
+bullet_type BULLET::getBulletType()
+{
+	return bullet_type_id;
+}
+
 PositionCoord BULLET::getCurrentPosition()
 {
 	return bullet_pos;
 }
 
+Direction BULLET::getDirection()
+{
+	return bullet_direction;
+}
+
 hit_points BULLET::getDamage()
 {
-	return damage;
+	//return damage;
 }
 
 unsigned int BULLET::getDmgSize()
 {
-	return dmgsize;
+	//return dmgsize;
 }
 
 double BULLET::getVelocity()
 {
-	return velocity;
+	//return velocity;
 }
 
 void BULLET::Move()
@@ -62,9 +70,4 @@ void BULLET::Move()
 		break;
 	}
 	}
-}
-
-Direction BULLET::getDirection()
-{
-    return bullet_direction;
 }

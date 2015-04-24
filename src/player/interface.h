@@ -17,12 +17,13 @@ namespace player
         PositionCoord player_pos;
         Direction player_direction;
         hit_points hp;
-        hit_points damage; //к удалению
-        unsigned int size; //к удалению
-        //player_type player_type_id;
+		player_type player_type_id;
+		bullet_type bullet_type_id;
+       /* hit_points damage; //к удалению
+        unsigned int size; //к удалению*/
 
     public:
-        PLAYER(t_player_number, PositionCoord, Direction, hit_points, hit_points, unsigned int);
+        PLAYER(t_player_number, PositionCoord, Direction, hit_points, player_type, bullet_type);
 
         t_player_number getPlayerId();
 
@@ -31,6 +32,8 @@ namespace player
         Direction getCurrentDirection();
 
         hit_points getCurrentHitPoints();
+
+		bullet_type getBulletType();
 
         unsigned int getSize();
 
@@ -47,30 +50,33 @@ namespace player
 
     class BULLET
     {
-        t_player_number player_id; // заменить на PLAYER*
+        t_player_number player_id;
+		bullet_type bullet_type_id;
         PositionCoord bullet_pos;
         Direction bullet_direction;
-        hit_points damage;  //к удалению
+       /* hit_points damage;  //к удалению
         unsigned int dmgsize; //к удалению	//Пуля будет уничтожать ряд квадратиков, перпендикулярно направлению движения
-        double velocity; //к удалению
-        //bullet_type bullet_type_id;
+        double velocity; //к удалению*/
+        
 
     public:
-        BULLET(t_player_number, PositionCoord, Direction, hit_points, unsigned int, double);
+        BULLET(t_player_number, bullet_type, PositionCoord, Direction);
+
+		bullet_type getBulletType();
 
         t_player_number getPlayerId();
 
         PositionCoord getCurrentPosition();
 
+		Direction getDirection();
+
         hit_points getDamage();
 
         unsigned int getDmgSize();
 
-        double getVelocity();
+        unsigned int getVelocity();
 
         void Move();
-
-        Direction getDirection();
 
         ~BULLET(){};
     };
