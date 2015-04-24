@@ -42,7 +42,7 @@ unsigned int BULLET::getDmgSize()
 	return itMap->second.damage_size;
 }
 
-double BULLET::getVelocity()
+unsigned int BULLET::getVelocity()
 {
 	auto itMap = bullet_types_database.find(bullet_type_id);
 	return itMap->second.velocity;

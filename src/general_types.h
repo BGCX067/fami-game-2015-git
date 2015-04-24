@@ -26,8 +26,8 @@ struct BULLET_TYPE_STRUCT
 	unsigned int velocity;
 };
 
-std::map<player_type, PLAYER_TYPE_STRUCT> player_types_database;
-std::map<bullet_type, BULLET_TYPE_STRUCT> bullet_types_database;
+const std::map<player_type, PLAYER_TYPE_STRUCT> player_types_database;
+const std::map<bullet_type, BULLET_TYPE_STRUCT> bullet_types_database;
 
 
 /* Положение на карте */
