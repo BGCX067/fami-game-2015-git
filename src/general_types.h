@@ -4,12 +4,31 @@
 Описание типов, общих для нескольких подсистем
 */
 
+#include <map>
 
 /*Номер игрока*/
 typedef unsigned int t_player_number;
+typedef unsigned int player_type;
+typedef unsigned int bullet_type;
 
 /*Очки жизни игрока*/
- typedef int hit_points;
+typedef int hit_points;
+
+struct PLAYER_TYPE_STRUCT
+{
+	unsigned int tank_size;
+};
+
+struct BULLET_TYPE_STRUCT
+{
+	hit_points damage;
+	unsigned int damage_size;
+	unsigned int velocity;
+};
+
+map<player_type, PLAYER_TYPE_STRUCT> player_types_database;
+map<bullet_type, BULLET_TYPE_STRUCT> bullet_types_database;
+
 
 /* Положение на карте */
 struct PositionCoord {

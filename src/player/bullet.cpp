@@ -32,17 +32,20 @@ Direction BULLET::getDirection()
 
 hit_points BULLET::getDamage()
 {
-	//return damage;
+	auto itMap = bullet_types_database.find(bullet_type_id);
+	return itMap->second.damage;
 }
 
 unsigned int BULLET::getDmgSize()
 {
-	//return dmgsize;
+	auto itMap = bullet_types_database.find(bullet_type_id);
+	return itMap->second.damage_size;
 }
 
 double BULLET::getVelocity()
 {
-	//return velocity;
+	auto itMap = bullet_types_database.find(bullet_type_id);
+	return itMap->second.velocity;
 }
 
 void BULLET::Move()

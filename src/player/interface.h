@@ -19,8 +19,6 @@ namespace player
         hit_points hp;
 		player_type player_type_id;
 		bullet_type bullet_type_id;
-       /* hit_points damage; //к удалению
-        unsigned int size; //к удалению*/
 
     public:
         PLAYER(t_player_number, PositionCoord, Direction, hit_points, player_type, bullet_type);
@@ -37,8 +35,7 @@ namespace player
 
         unsigned int getSize();
 
-        //Танк получает урон. 0 - hp еще осталось, 1 - нет     (вместо проверки hp на равенство 0)
-        bool RecieveDamage(hit_points);
+        bool RecieveDamage(bullet_type);
 
         void Move(tmap::TMap*);
 
@@ -54,11 +51,7 @@ namespace player
 		bullet_type bullet_type_id;
         PositionCoord bullet_pos;
         Direction bullet_direction;
-       /* hit_points damage;  //к удалению
-        unsigned int dmgsize; //к удалению	//Пуля будет уничтожать ряд квадратиков, перпендикулярно направлению движения
-        double velocity; //к удалению*/
         
-
     public:
         BULLET(t_player_number, bullet_type, PositionCoord, Direction);
 
