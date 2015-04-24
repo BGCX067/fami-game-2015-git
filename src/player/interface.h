@@ -8,6 +8,7 @@ using namespace std;
 /*
 Интерфейсы взаимодействия с системой управления игроком (PLAYER).
 */
+namespace tmap { class TMap; }
 
 namespace player
 {

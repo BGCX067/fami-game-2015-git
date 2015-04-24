@@ -29,7 +29,6 @@ SOURCES += main.cpp\
 
 HEADERS  += tanksgui.h \
     graph/interface.h \
-    gui/interface.h \
     logic/interface.h \
     map/interface.h \
     player/interface.h \
@@ -39,7 +38,10 @@ HEADERS  += tanksgui.h \
     graph/spritemanager.h \
     graph/graphinclude.h
 
+INCLUDEPATH += ../libs/rapidjson/include
+
 FORMS    += tanksgui.ui
 
 DISTFILES += \
-    graph/ReadMe.txt
+    graph/ReadMe.txt \
+    ../conf/map.json

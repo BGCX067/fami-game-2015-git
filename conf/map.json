@@ -1,0 +1,39 @@
+{
+    "map": {
+        "sizex": 15,
+        "sizey": 15,
+        "block_size": 3,
+        "walls": [{
+            "type": 1,
+            "xy": [[2, 2], [3, 2]]
+        }, {
+            "type": 2,
+            "xy": [[3, 3], [4, 3]]
+        }],
+        "players": [{
+            "xy": [1, 1],
+            "dir": 1,
+            "type": 0,
+            "health": 15
+        }, {
+            "xy": [4, 4],
+            "dir": 3,
+            "type": 1,
+            "health": 20
+        }],
+        "player_types": [{
+            "speed": 1,
+            "bullet_type": 0
+        }, {
+            "speed": 2,
+            "bullet_type": 1
+        }],
+        "bullet_types": [{
+            "damage": 5,
+            "speed": 1
+        }, {
+            "damage": 3,
+            "speed": 2
+        }]
+    }
+}

@@ -11,9 +11,9 @@ TanksGUI::TanksGUI(QWidget *parent) :
     ui(new Ui::TanksGUI)
 {
     logic_flag = 0;
-    ui->setupUi(this);    
+    ui->setupUi(this);
     ui->graphicsView->setGeometry(0, 0 , 775, 436);
-	setFocus();
+    setFocus();
 }
 
 TanksGUI::~TanksGUI()
@@ -244,6 +244,8 @@ void TanksGUI::on_actionDownload_Map_triggered()
    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*)"));
    //Отправить событие Карте!
    printf("CANT TOUCH THIS!!!\n");
+
+   this->MapModule->loadConfig(fileName.toStdString());
 }
 
 // Обработка событий по основному игровому таймеру

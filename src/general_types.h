@@ -16,14 +16,14 @@ typedef int hit_points;
 
 struct PLAYER_TYPE_STRUCT
 {
-	unsigned int tank_size;
+    unsigned int tank_size;
 };
 
 struct BULLET_TYPE_STRUCT
 {
-	hit_points damage;
-	unsigned int damage_size;
-	unsigned int velocity;
+    hit_points damage;
+    unsigned int damage_size;
+    unsigned int velocity;
 };
 
 const std::map<player_type, PLAYER_TYPE_STRUCT> player_types_database;
@@ -70,21 +70,11 @@ enum class GUICommand {Left, Right, Up, Down, Atack, START, PAUSE, CONTINUE, STO
 enum class LOGICCommand {GAME_CONTINUE, GAME_OVER, PLAYER_1_WIN, PLAYER_2_WIN};
 
 class Wall {
+    int type;
 public:
-    Wall() {};
+    Wall(int type) : type(type) {};
     ~Wall() {};
-};
-
-class Player {
-public:
-    Player() {};
-    ~Player() {};
-};
-
-class Bullet {
-public:
-    Bullet() {};
-    ~Bullet() {};
+    int getType() {return this->type;}
 };
 
 // ========================================================================

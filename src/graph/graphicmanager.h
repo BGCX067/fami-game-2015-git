@@ -2,9 +2,9 @@
 #define GRAPHICMANAGER_H
 
 #include "graphinclude.h"
-#include "graph/sprite.h"
-#include "graph/interface.h"
-#include "map/interface.h"
+#include "sprite.h"
+#include "interface.h"
+#include "../map/interface.h"
 #include <QGLWidget>
 
 class graphicManager : public QGLWidget, public graph::graphicManager
