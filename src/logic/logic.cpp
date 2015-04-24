@@ -30,7 +30,7 @@ void Logic::run()
 {
     // Просчет разрушений с прошлого шага
     _currentMap->forEachBullet([&](PositionCoord pc, shared_ptr<Bullet> bul1)->void {
-        player::BULLET bul(1, pc, Direction::Down, 100, 100, 1.0);// временно. bul = bul1
+        player::BULLET bul(1, 1, pc, Direction::Down);// временно. bul = bul1
         PositionCoord prevPos = bul.getCurrentPosition(); // позиция на прошлом шаге
         bul.Move();
         PositionCoord curPos = bul.getCurrentPosition(); //возможная текущая позиция

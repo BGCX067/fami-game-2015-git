@@ -31,6 +31,8 @@ namespace player
 
         hit_points getCurrentHitPoints();
 
+		player_type getPlayerType();
+
 		bullet_type getBulletType();
 
         unsigned int getSize();

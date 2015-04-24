@@ -2,13 +2,14 @@
 
 using namespace player;
 
-PLAYER::PLAYER(t_player_number id, PositionCoord startPosition, Direction startDirection, hit_points startHP, bullet_type bType)
+PLAYER::PLAYER(t_player_number id, PositionCoord startPosition, Direction startDirection, hit_points startHP, player_type pType, bullet_type bType)
 {
     player_id = id;
     player_pos.x = startPosition.x;
     player_pos.y = startPosition.y;
     player_direction = startDirection;
     hp = startHP;
+	player_type_id = pType;
 	bullet_type_id = bType;
 }
 
@@ -30,6 +31,11 @@ Direction PLAYER::getCurrentDirection()
 hit_points PLAYER::getCurrentHitPoints()
 {
     return hp;
+}
+
+player_type PLAYER::getPlayerType()
+{
+	return player_type_id;
 }
 
 bullet_type PLAYER::getBulletType()
