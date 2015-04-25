@@ -34,6 +34,9 @@ void Logic::run()
         PositionCoord prevPos = bul.getCurrentPosition(); // позиция на прошлом шаге
         bul.Move();
         PositionCoord curPos = bul.getCurrentPosition(); //возможная текущая позиция
+        //!!!
+        ///здесь должна быть проверка вылета за карту
+        //!!!
         size_t traceLength = 0; //длинна пути
         Direction bulDirect = bul.getDirection();
         //ищем длину пути
@@ -111,26 +114,35 @@ void Logic::run()
 
     // Обработка очереди команд
     while(_commandsFromGUI.size() > 0) {
-        shared_ptr<CommandFromGUI> guiCoomand(&(_commandsFromGUI.back()));
+
+        CommandFromGUI currCommand = _commandsFromGUI.back();
         _commandsFromGUI.pop();
-        int playerNumber = guiCoomand->getPlayerNumber();
-        switch(guiCoomand->getGUICommand()){
-        case GUICommand::Up:
+        int playerNumber = currCommand.getPlayerNumber();
+
+        auto GUICommandMove = [&](Direction dir)->void {
             _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<Player> pPlayer1)->void {
                 player::PLAYER pPlayer(1, pcPlayer, Direction::Up, 100, 100, 100); //delete
-                if(pPlayer.getPlayerId() == playerNumber) {
-                    // Нашли игрока
-                    PositionCoord prevPos = pPlayer.getCurrentPosition(); // позиция на прошлом шаге
-                    pPlayer.Move(_currentMap.get()); // узнать о методе
-                    PositionCoord curPos = pPlayer.getCurrentPosition(); //возможная текущая позиция
-                }
+                if(pPlayer.getPlayerId() == playerNumber)
+                    if(pPlayer.getCurrentDirection() == dir)
+                        pPlayer.Move(_currentMap.get());
+                    else
+                        pPlayer.Turn(dir);
             });
+        };
+
+        switch(currCommand.getGUICommand()){
+
+        case GUICommand::Up:
+            GUICommandMove(Direction::Up);
             break;
         case GUICommand::Down:
+            GUICommandMove(Direction::Down);
             break;
         case GUICommand::Left:
+            GUICommandMove(Direction::Left);
             break;
         case GUICommand::Right:
+            GUICommandMove(Direction::Right);
             break;
         case GUICommand::Atack:
             _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<Player> pPlayer1)->void {
@@ -138,7 +150,7 @@ void Logic::run()
                 if(pPlayer.getPlayerId() == playerNumber) {
                     //Стреляли… Саид(c)
                     auto newBullet = pPlayer.Attack();
-                    //_currentMap->создать пулю
+                    ///_currentMap->создать пулю
                 }
             });
             break;
@@ -146,5 +158,4 @@ void Logic::run()
             break;
         }
     }
-
 }
