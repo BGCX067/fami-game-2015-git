@@ -44,7 +44,7 @@ private:
     Ui::TanksGUI *ui;
     gui_cmd guicmd;
     QTimer* game_timer;
-
+    bool logic_flag;
 
 
     private slots:
