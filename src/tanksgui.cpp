@@ -206,22 +206,24 @@ void TanksGUI::on_pushButton_clicked()
         testCommand.setFromGUICommand(guicmd.desc);
         LogicModule->setNextCommandFromGUI(testCommand);
     }
-
 }
 
-// Кнопка "Exit Game"
+// Кнопка "Stop Game"
 void TanksGUI::on_pushButton_2_clicked()
 {
-    printf("BUTTON_EXIT!!!\n");
-    guicmd.player_id = 0;   guicmd.cmd_code = 11;    guicmd.desc = GUICommand::EXIT;
+    if(logic_flag == 1)
+    {
+        printf("BUTTON_STOP!!!\n");
+        guicmd.player_id = 0;   guicmd.cmd_code = 11;    guicmd.desc = GUICommand::STOP;
 
-    CommandFromGUI testCommand;
-    testCommand.setPlayerNumber(guicmd.player_id);
-    testCommand.setFromGUICommand(guicmd.desc);
-    LogicModule->setNextCommandFromGUI(testCommand);
-    logic_flag = 0;
-    game_timer->stop();
-    printf("TIMER IS DEAD\n");
+        CommandFromGUI testCommand;
+        testCommand.setPlayerNumber(guicmd.player_id);
+        testCommand.setFromGUICommand(guicmd.desc);
+        LogicModule->setNextCommandFromGUI(testCommand);
+        logic_flag = 0;
+        game_timer->stop();
+        printf("TIMER IS DEAD\n");
+    }
 }
 
 // Кнопка "About"

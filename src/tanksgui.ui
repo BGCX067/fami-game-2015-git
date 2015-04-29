@@ -61,7 +61,7 @@
         </rect>
        </property>
        <property name="text">
-        <string>Exit Game</string>
+        <string>Stop Game</string>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton_3">
