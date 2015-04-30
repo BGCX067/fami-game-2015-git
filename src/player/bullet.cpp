@@ -32,20 +32,20 @@ Direction BULLET::getDirection()
 
 hit_points BULLET::getDamage()
 {
-	auto itMap = bullet_types_database.find(bullet_type_id);
-	return itMap->second.damage;
+  /*  auto itMap = tmap::TMap::bullet_types_database.find(bullet_type_id);*/
+    return tmap::TMap::getBulletType(bullet_type_id).damage;
 }
 
 unsigned int BULLET::getDmgSize()
 {
-	auto itMap = bullet_types_database.find(bullet_type_id);
-	return itMap->second.damage_size;
+    /*auto itMap = tmap::TMap::bullet_types_database.find(bullet_type_id);*/
+    return tmap::TMap::getBulletType(bullet_type_id).damage_size;
 }
 
 unsigned int BULLET::getVelocity()
 {
-	auto itMap = bullet_types_database.find(bullet_type_id);
-	return itMap->second.velocity;
+    /*auto itMap = tmap::TMap::bullet_types_database.find(bullet_type_id);*/
+    return tmap::TMap::getBulletType(bullet_type_id).velocity;
 }
 
 void BULLET::Move()

@@ -45,14 +45,14 @@ bullet_type PLAYER::getBulletType()
 
 unsigned int PLAYER::getSize()
 {
-	auto itMap = player_types_database.find(player_type_id);
-	return itMap->second.tank_size;
+    /*auto itMap = tmap::TMap::player_types_database.find(player_type_id);*/
+    return tmap::TMap::getPlayerType(player_type_id).tank_size;
 }
 
 bool PLAYER::RecieveDamage(bullet_type bType)
 {
-	auto itMap = bullet_types_database.find(bType);
-	auto dmg = itMap->second.damage;
+    /*auto itMap = tmap::TMap::bullet_types_database.find(bType);*/
+    auto dmg = tmap::TMap::getBulletType(player_type_id).damage;
     hp -= dmg;
     if (hp <= 0) return 1;
     else return 0;
@@ -62,8 +62,8 @@ void PLAYER::Move(tmap::TMap* map_)
 {
     PositionCoord newPosition, checkPosition;
     Direction d;
-	auto itMap = player_types_database.find(player_type_id);
-	auto size = itMap->second.tank_size;
+   /* auto itMap = tmap::TMap::player_types_database.find(player_type_id);*/
+    auto size = tmap::TMap::getPlayerType(player_type_id).tank_size;
     int s = (size - 1) / 2;
 
     switch (player_direction)
@@ -113,8 +113,8 @@ void PLAYER::Turn(Direction direction)
 
 shared_ptr<BULLET> PLAYER::Attack()
 {
-	auto itMap = player_types_database.find(player_type_id);
-	auto size = itMap->second.tank_size;
+    /*auto itMap = tmap::TMap::player_types_database.find(player_type_id);*/
+    auto size = /*itMap->second.tank_size*/ tmap::TMap::getPlayerType(player_type_id).tank_size;
     PositionCoord start_pos;
     int s = (size - 1) / 2;
 

@@ -23,7 +23,15 @@ namespace tmap {
         map<int, map<int, shared_ptr<Wall>>> walls;
         map<int, map<int, shared_ptr<player::PLAYER>>> players;
         map<int, map<int, shared_ptr<player::BULLET>>> bullets;
+
+        static map<player_type, PLAYER_TYPE_STRUCT> player_types_database;
+        static map<bullet_type, BULLET_TYPE_STRUCT> bullet_types_database;
+
     public:
+
+        static PLAYER_TYPE_STRUCT getPlayerType(player_type pt);
+        static BULLET_TYPE_STRUCT getBulletType(bullet_type bt);
+
         bool init(int level);
         bool clean();
 

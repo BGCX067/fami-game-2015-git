@@ -4,6 +4,18 @@
 
 using namespace tmap;
 
+map<player_type, PLAYER_TYPE_STRUCT> TMap::player_types_database;
+map<bullet_type, BULLET_TYPE_STRUCT> TMap::bullet_types_database;
+
+PLAYER_TYPE_STRUCT TMap::getPlayerType(player_type pt) {
+    return player_types_database[pt];
+}
+
+BULLET_TYPE_STRUCT TMap::getBulletType(bullet_type pt) {
+    return bullet_types_database[pt];
+}
+
+
 bool TMap::init(int level) {
     return true;
 }
