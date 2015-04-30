@@ -128,8 +128,7 @@ void Logic::run()
                 if(pPlayer->getPlayerId() == playerNumber) {
                     if(pPlayer->getCurrentDirection() == dir) {
                         // не стреляли мы в ту сторону
-                        if(playerFire[playerNumber].first &&
-                                playerFire[playerNumber].second.find(dir) != playerFire[playerNumber].second.end())
+                        if(playerFire[playerNumber].second.find(dir) == playerFire[playerNumber].second.end())
                             pPlayer->Move(_currentMap.get());
                     }
                     else
