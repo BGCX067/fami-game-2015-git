@@ -1,5 +1,7 @@
 #include "../logic/interface.h"
 #include "../player/interface.h"
+#include <array>
+#include <set>
 #include <QDebug>
 
 
@@ -7,13 +9,10 @@ using namespace logic;
 
 Logic::Logic(shared_ptr<tmap::TMap> map)
 {
+    if(!map)
+        throw QString("Error: Bad MAP descriptor");
     _currentMap = map;
     _gameStatus = LOGICCommand::GAME_CONTINUE;
-}
-
-Logic::~Logic()
-{
-
 }
 
 LOGICCommand Logic::getStatusForGUI()
@@ -29,16 +28,12 @@ void Logic::setNextCommandFromGUI(CommandFromGUI g_commandFromGUI)
 void Logic::run()
 {
     // Просчет разрушений с прошлого шага
-    _currentMap->forEachBullet([&](PositionCoord pc, shared_ptr<player::BULLET> bul1)->void {
-        player::BULLET bul(1, 1, pc, Direction::Down);// временно. bul = bul1
-        PositionCoord prevPos = bul.getCurrentPosition(); // позиция на прошлом шаге
-        bul.Move();
-        PositionCoord curPos = bul.getCurrentPosition(); //возможная текущая позиция
-        //!!!
-        ///здесь должна быть проверка вылета за карту
-        //!!!
-        int traceLength = 0; //длинна пути
-        Direction bulDirect = bul.getDirection();
+    _currentMap->forEachBullet([&](PositionCoord pc, shared_ptr<player::BULLET> bul)->void {
+        PositionCoord prevPos = bul->getCurrentPosition(); // позиция на прошлом шаге
+        bul->Move();
+        PositionCoord curPos = bul->getCurrentPosition(); //возможная текущая позиция
+        size_t traceLength = 0; //длинна пути
+        Direction bulDirect = bul->getDirection();
         //ищем длину пути
         switch (bulDirect) {
         case Direction::Up:
@@ -56,7 +51,7 @@ void Logic::run()
         }
         // пуля - дура, ищет жертву на своем пути
         PositionCoord intermediatePos = prevPos;
-        for(int i = 0; i < traceLength; i++) {
+        for(size_t i = 0; i < traceLength; i++) {
             switch (bulDirect) {
             case Direction::Up:
                 intermediatePos.y += i;
@@ -72,20 +67,28 @@ void Logic::run()
                 break;
             }
             if(!_currentMap->isEmpty(intermediatePos)) {
+                //может вылет за карту
+                if(intermediatePos.x < 1 || intermediatePos.x > _currentMap->getSizeX()
+                        || intermediatePos.y < 1 || intermediatePos.y > _currentMap->getSizeY()) {
+                    _currentMap->deleteBullet(pc);
+                    i = traceLength;
+                    break;
+                }
+
                 //теперь смотрим кто жертва
                 _currentMap->forEachWall([&](PositionCoord pcWall, shared_ptr<Wall> pWall)->void {
                     //может это стенка ?!
-                    if(pcWall == intermediatePos) {
-                        //хана стенке
-                        _currentMap->deleteWall(pcWall);
-                    }
+                    if(pWall->getType() == 1) //кирпичная стенка
+                        if(pcWall == intermediatePos) {
+                            //хана стенке
+                            _currentMap->deleteWall(pcWall);
+                        }
                 });
-                _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<player::PLAYER> pPlayer1)->void {
+                _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<player::PLAYER> pPlayer)->void {
                     //или кранты танку?
                     if(pcPlayer == intermediatePos) {
                         // По танку вдарила болванка, Прощай родимый экипаж.
-                        player::PLAYER pPlayer(1, pcPlayer, Direction::Up, 100, 100, 100); //delete
-                        if(pPlayer.RecieveDamage(bul.getDamage()) == 1)
+                        if(pPlayer->RecieveDamage(bul->getDamage()) == 1)
                             _currentMap->deletePlayer(pcPlayer);
                     }
                 });
@@ -98,10 +101,9 @@ void Logic::run()
 
     // Проверка состояния игры
     bool player1Dead = true, player2Dead = true;
-    _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<player::PLAYER> pPlayer1)->void {
-        player::PLAYER pPlayer(1, pcPlayer, Direction::Up, 100, 100, 100); //delete
-        if(pPlayer.getPlayerId() == 1) player1Dead = false;
-        if(pPlayer.getPlayerId() == 2) player2Dead = false;
+    _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
+        if(pPlayer->getPlayerId() == 1) player1Dead = false;
+        if(pPlayer->getPlayerId() == 2) player2Dead = false;
     });
     if(player1Dead)
         if(player2Dead)
@@ -112,21 +114,27 @@ void Logic::run()
         if(player2Dead)
             _gameStatus = LOGICCommand::PLAYER_1_WIN;
 
+    //хранит флаг наличия стрельбы и напрвления стрельбы
+    array<pair<bool, set<Direction> >, 2> playerFire; //не оптимально, надо будет, исправим
     // Обработка очереди команд
-    while(_commandsFromGUI.size() > 0) {
+    while(!_commandsFromGUI.empty()) {
 
         CommandFromGUI currCommand = _commandsFromGUI.back();
         _commandsFromGUI.pop();
-        int playerNumber = currCommand.getPlayerNumber();
+        size_t playerNumber = currCommand.getPlayerNumber();
 
         auto GUICommandMove = [&](Direction dir)->void {
-            _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<player::PLAYER> pPlayer1)->void {
-                player::PLAYER pPlayer(1, pcPlayer, Direction::Up, 100, 100, 100); //delete
-                if(pPlayer.getPlayerId() == playerNumber)
-                    if(pPlayer.getCurrentDirection() == dir)
-                        pPlayer.Move(_currentMap.get());
+            _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
+                if(pPlayer->getPlayerId() == playerNumber) {
+                    if(pPlayer->getCurrentDirection() == dir) {
+                        // не стреляли мы в ту сторону
+                        if(playerFire[playerNumber].first &&
+                                playerFire[playerNumber].second.find(dir) != playerFire[playerNumber].second.end())
+                            pPlayer->Move(_currentMap.get());
+                    }
                     else
-                        pPlayer.Turn(dir);
+                        pPlayer->Turn(dir);
+                }
             });
         };
 
@@ -145,12 +153,15 @@ void Logic::run()
             GUICommandMove(Direction::Right);
             break;
         case GUICommand::Atack:
-            _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<player::PLAYER> pPlayer1)->void {
-                player::PLAYER pPlayer(1, pcPlayer, Direction::Up, 100, 100, 100); //delete
-                if(pPlayer.getPlayerId() == playerNumber) {
+            _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
+                if(pPlayer->getPlayerId() == playerNumber) {
                     //Стреляли… Саид(c)
-                    auto newBullet = pPlayer.Attack();
-                    ///_currentMap->создать пулю
+                    auto newBullet = pPlayer->Attack();
+                    _currentMap->createBullet(newBullet->getCurrentPosition(),newBullet);
+
+                    //теперь мы знаем куда не надо двигаться из-за отдачи
+                    playerFire[playerNumber].first = true;
+                    playerFire[playerNumber].second.insert(pPlayer->getCurrentDirection());
                 }
             });
             break;

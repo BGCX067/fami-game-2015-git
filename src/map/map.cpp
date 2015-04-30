@@ -44,7 +44,7 @@ bool TMap::loadConfig(string config) {
     printf("Start load Map from file %s\n", config.c_str());
 
     FILE* fp;
-    fopen_s(&fp, config.c_str(), "r"); // non-Windows use "r"
+    fp = fopen(config.c_str(), "r"); // non-Windows use "r"
     char readBuffer[65536];
     FileReadStream is(fp, readBuffer, sizeof(readBuffer));
     Document doc;
