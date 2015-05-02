@@ -13,6 +13,8 @@ TanksGUI::TanksGUI(QWidget *parent) :
     logic_flag = 0;
     ui->setupUi(this);
     ui->graphicsView->setGeometry(0, 0 , 775, 436);
+    // Инициализация карты(testing)
+    MapModule = make_shared<tmap::TMap>();
     setFocus();
 }
 
@@ -189,11 +191,9 @@ void TanksGUI::on_pushButton_clicked()
         // Создание таймера
         game_timer = new QTimer(this);
         connect(game_timer, SIGNAL(timeout()), this, SLOT(timer_event()));
+        connect(game_timer, SIGNAL(timeout()), ui->graphicsView ,SLOT(updateGL()));
         game_timer->start(10);
         printf("TIMER IS ALIVE\n");
-
-        // Инициализация карты(testing)
-        MapModule = make_shared<tmap::TMap>();
 
         // Инициализация логики
         LogicModule = make_shared<logic::Logic>(MapModule);
@@ -243,7 +243,7 @@ void TanksGUI::on_actionDownload_Map_triggered()
 {
    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*)"));
    //Отправить событие Карте!
-   printf("CANT TOUCH THIS!!!\n");
+   //printf("CANT TOUCH THIS!!!\n");
 
    this->MapModule->loadConfig(fileName.toStdString());
 }
@@ -252,4 +252,5 @@ void TanksGUI::on_actionDownload_Map_triggered()
 void TanksGUI::timer_event() {
     qDebug() << "Timer event";
     LogicModule->run();
+    ui->graphicsView->render();
 }
