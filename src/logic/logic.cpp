@@ -76,22 +76,20 @@ void Logic::run()
                 }
 
                 //теперь смотрим кто жертва
-                _currentMap->forEachWall([&](PositionCoord pcWall, shared_ptr<Wall> pWall)->void {
-                    //может это стенка ?!
+                //может это стенка ?!
+                shared_ptr<Wall> pWall = _currentMap->getWall(intermediatePos);
+                if(pWall) {
                     if(pWall->getType() == 1) //кирпичная стенка
-                        if(pcWall == intermediatePos) {
-                            //хана стенке
-                            _currentMap->deleteWall(pcWall);
-                        }
-                });
-                _currentMap->forEachPlayer([&](PositionCoord pcPlayer, shared_ptr<player::PLAYER> pPlayer)->void {
-                    //или кранты танку?
-                    if(pcPlayer == intermediatePos) {
-                        // По танку вдарила болванка, Прощай родимый экипаж.
-                        if(pPlayer->RecieveDamage(bul->getDamage()) == 1)
-                            _currentMap->deletePlayer(pcPlayer);
-                    }
-                });
+                        //хана стенке
+                        _currentMap->deleteWall(intermediatePos);
+                }
+                //или кранты танку?
+                shared_ptr<player::PLAYER> pPlayer = _currentMap->getPlayer(intermediatePos);
+                if(pPlayer) {
+                    // По танку вдарила болванка, Прощай родимый экипаж.
+                    if(pPlayer->RecieveDamage(bul->getDamage()) == 1)
+                        _currentMap->deletePlayer(intermediatePos);
+                }
                 _currentMap->deleteBullet(pc);
                 // снаряд взорвался, дальше считать бессмысленно
                 break;

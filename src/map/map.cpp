@@ -17,6 +17,7 @@ BULLET_TYPE_STRUCT TMap::getBulletType(bullet_type pt) {
 
 
 bool TMap::init(int level) {
+    (void)level;
     return true;
 }
 
@@ -44,7 +45,13 @@ bool TMap::loadConfig(string config) {
     printf("Start load Map from file %s\n", config.c_str());
 
     FILE* fp;
-    fp = fopen(config.c_str(), "r"); // non-Windows use "r"
+
+#ifdef WIN32
+    fopen_s(&fp, config.c_str(), "r");
+#else
+    fp = fopen(config.c_str(), "r");
+#endif
+
     char readBuffer[65536];
     FileReadStream is(fp, readBuffer, sizeof(readBuffer));
     Document doc;
@@ -92,13 +99,14 @@ bool TMap::loadConfig(string config) {
         auto type = p["type"].GetInt();
         auto btype = dmap["player_types"][type]["bullet_type"].GetInt();
         auto speed = dmap["player_types"][type]["speed"].GetInt();
+        (void) speed;
         auto hp = p["health"].GetInt();
         printf("new Player [%d, %d]\n", xy.x, xy.y);
         this->createPlayer(
-          xy,
-          shared_ptr<player::PLAYER>(
-            new player::PLAYER(i, xy, dir, hp, type, btype)
-          )
+            xy,
+            shared_ptr<player::PLAYER>(
+                new player::PLAYER(i, xy, dir, hp, type, btype)
+            )
         );
     }
     return true;
@@ -114,6 +122,7 @@ bool TMap::isEmpty(PositionCoord coord) {
 
 //Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
 bool TMap::isEmptyRow(int n, PositionCoord coord, Direction a) {
+    (void)n; (void)coord; (void)a;
     return false;
 }
 
@@ -139,36 +148,30 @@ void TMap::forEachBullet(function<void(PositionCoord, shared_ptr<player::BULLET>
 }
 
 bool TMap::createWall(PositionCoord coord, shared_ptr<Wall> w) {
-    const auto& wallsX = walls.find(coord.x);
-    if (wallsX == walls.end())return true;
-    auto& wallsY = wallsX->second;
-    if (wallsY.find(coord.y) == wallsY.end()) {
-        wallsY[coord.y] = w;
-        return true;
-    }
-    return false;
+    walls[coord.x][coord.y] = w;
+    return true;
 }
 
 bool TMap::createPlayer(PositionCoord coord, shared_ptr<player::PLAYER> p) {
-    const auto& playersX = players.find(coord.x);
-    if (playersX == players.end())return true;
-    auto& playersY = playersX->second;
-    if (playersY.find(coord.y) == playersY.end()) {
-        playersY[coord.y] = p;
-        return true;
-    }
-    return false;
+    players[coord.x][coord.y] = p;
+    return true;
 }
 
 bool TMap::createBullet(PositionCoord coord, shared_ptr<player::BULLET> b) {
-    const auto& bulletsX = bullets.find(coord.x);
-    if (bulletsX == bullets.end())return true;
-    auto& bulletsY = bulletsX->second;
-    if (bulletsY.find(coord.y) == bulletsY.end()) {
-        bulletsY[coord.y] = b;
-        return true;
-    }
-    return false;
+    bullets[coord.x][coord.y] = b;
+    return true;
+}
+
+shared_ptr<Wall> TMap::getWall(PositionCoord pc) {
+    return walls[pc.x][pc.y];
+}
+
+shared_ptr<player::PLAYER> TMap::getPlayer(PositionCoord pc) {
+    return players[pc.x][pc.y];
+}
+
+shared_ptr<player::BULLET> TMap::getBullet(PositionCoord pc) {
+    return bullets[pc.x][pc.y];
 }
 
 bool TMap::deleteWall(PositionCoord coord) {

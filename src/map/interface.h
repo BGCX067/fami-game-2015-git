@@ -52,6 +52,10 @@ namespace tmap {
         bool createPlayer(PositionCoord, shared_ptr<player::PLAYER>);
         bool createBullet(PositionCoord, shared_ptr<player::BULLET>);
 
+        shared_ptr<Wall> getWall(PositionCoord);
+        shared_ptr<player::PLAYER> getPlayer(PositionCoord);
+        shared_ptr<player::BULLET> getBullet(PositionCoord);
+
         bool deleteWall(PositionCoord);
         bool deletePlayer(PositionCoord);
         bool deleteBullet(PositionCoord);
