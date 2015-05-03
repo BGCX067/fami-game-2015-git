@@ -18,8 +18,8 @@ namespace player
         PositionCoord player_pos;
         Direction player_direction;
         hit_points hp;
-		player_type player_type_id;
-		bullet_type bullet_type_id;
+        player_type player_type_id;
+        bullet_type bullet_type_id;
 
     public:
         PLAYER(t_player_number, PositionCoord, Direction, player_type, bullet_type);
@@ -32,15 +32,19 @@ namespace player
 
         hit_points getCurrentHitPoints();
 
-		player_type getPlayerType();
+        player_type getPlayerType();
 
-		bullet_type getBulletType();
+        bullet_type getBulletType();
 
         unsigned int getSize();
 
-		unsigned int getVelocity();
+        unsigned int getVelocity();
 
-        bool RecieveDamage(bullet_type);
+        void setPlayerType(player_type);
+
+        void setCurrentDirection(Direction);
+
+        bool RecieveDamage(hit_points);
 
         void Move(tmap::TMap*);
 
@@ -53,20 +57,20 @@ namespace player
     class BULLET
     {
         t_player_number player_id;
-		bullet_type bullet_type_id;
+        bullet_type bullet_type_id;
         PositionCoord bullet_pos;
         Direction bullet_direction;
-        
+
     public:
         BULLET(t_player_number, bullet_type, PositionCoord, Direction);
 
-		bullet_type getBulletType();
+        bullet_type getBulletType();
 
         t_player_number getPlayerId();
 
         PositionCoord getCurrentPosition();
 
-		Direction getDirection();
+        Direction getDirection();
 
         hit_points getDamage();
 

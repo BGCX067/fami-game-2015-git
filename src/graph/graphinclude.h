@@ -10,7 +10,7 @@ typedef unsigned char uchar;
 #define GL_CLAMP_TO_EDGE 0x812F
 
 //Global constants
-const float PI = 3.14159265;
+const float PI = 3.14159265f;
 
 //Qt includes
 #include <QImage>

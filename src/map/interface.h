@@ -38,6 +38,7 @@ namespace tmap {
         int getSizeX();
         int getSizeY();
 
+        bool loadSquare(string square);
         bool loadConfig(string config);
 
         bool isEmpty(PositionCoord coord);

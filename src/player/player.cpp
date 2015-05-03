@@ -8,9 +8,9 @@ PLAYER::PLAYER(t_player_number id, PositionCoord startPosition, Direction startD
     player_pos.x = startPosition.x;
     player_pos.y = startPosition.y;
     player_direction = startDirection;
-	hp = tmap::TMap::getPlayerType(pType).default_hp;
-	player_type_id = pType;
-	bullet_type_id = bType;
+    hp = tmap::TMap::getPlayerType(pType).default_hp;
+    player_type_id = pType;
+    bullet_type_id = bType;
 }
 
 t_player_number PLAYER::getPlayerId()
@@ -35,12 +35,12 @@ hit_points PLAYER::getCurrentHitPoints()
 
 player_type PLAYER::getPlayerType()
 {
-	return player_type_id;
+    return player_type_id;
 }
 
 bullet_type PLAYER::getBulletType()
 {
-	return bullet_type_id;
+    return bullet_type_id;
 }
 
 unsigned int PLAYER::getSize()
@@ -50,15 +50,22 @@ unsigned int PLAYER::getSize()
 
 unsigned int PLAYER::getVelocity()
 {
-	return tmap::TMap::getPlayerType(player_type_id).velocity;
+    return tmap::TMap::getPlayerType(player_type_id).velocity;
 }
 
-bool PLAYER::RecieveDamage(bullet_type bType)
+bool PLAYER::RecieveDamage(hit_points damage)
 {
-    auto dmg = tmap::TMap::getBulletType(player_type_id).damage;
-    hp -= dmg;
+    hp -= damage;
     if (hp <= 0) return 1;
     else return 0;
+}
+
+void PLAYER::setPlayerType(player_type pt){
+    this->player_type_id = pt;
+}
+
+void PLAYER::setCurrentDirection(Direction dir) {
+    this->player_direction = dir;
 }
 
 void PLAYER::Move(tmap::TMap* map_)

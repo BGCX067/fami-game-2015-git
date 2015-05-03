@@ -44,4 +44,5 @@ FORMS    += tanksgui.ui
 
 DISTFILES += \
     graph/ReadMe.txt \
-    ../conf/map.json
+    ../conf/map.json \
+    ../conf/square.tmap

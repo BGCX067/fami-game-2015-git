@@ -1,6 +1,7 @@
 #include "../map/interface.h"
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
+#include <fstream>
 
 using namespace tmap;
 
@@ -15,18 +16,14 @@ BULLET_TYPE_STRUCT TMap::getBulletType(bullet_type pt) {
     return bullet_types_database[pt];
 }
 
-
 bool TMap::init(int level) {
     (void)level;
     return true;
 }
 
 bool TMap::clean() {
-    for(auto& m : walls) m.second.clear();
     walls.clear();
-    for(auto& m : players) m.second.clear();
     players.clear();
-    for(auto& m : bullets) m.second.clear();
     bullets.clear();
     return true;
 }
@@ -37,6 +34,69 @@ int TMap::getSizeX() {
 
 int TMap::getSizeY() {
     return this->sizey;
+}
+
+bool TMap::loadSquare(string square) {
+    fstream sq(square);
+
+    sq >> this->sizex >> this->sizey;
+
+    PositionCoord
+            max1(-1, -1),
+            min1(this->sizex, this->sizey),
+            max2(-1, -1),
+            min2(this->sizex, this->sizey);
+
+    char point;
+    for(int i = 0; i < this->sizex; i++) {
+        for(int j = 0; j < this->sizey; j++) {
+           sq >> point;
+           switch(point) {
+           case 'o':
+               this->createWall(
+                           PositionCoord(i,j),
+                           shared_ptr<Wall>(new Wall(1))
+                           );
+               break;
+           case '*':
+               this->createWall(
+                           PositionCoord(i,j),
+                           shared_ptr<Wall>(new Wall(0))
+                           );
+               break;
+           case '-': break;
+           case '1':
+               if(i > max1.x) max1.x = i;
+               if(i < min1.x) min1.x = i;
+               if(j > max1.y) max1.y = j;
+               if(j < min1.y) min1.y = j;
+               break;
+           case '2':
+               if(i > max2.x) max2.x = i;
+               if(i < min2.x) min2.x = i;
+               if(j > max2.y) max2.y = j;
+               if(j < min2.y) min2.y = j;
+               break;
+           }
+        }
+    }
+
+    sq.close();
+
+    PositionCoord pc1((max1.x + min1.x)/2,(max1.y + min1.y)/2);
+    this->createPlayer(
+                pc1,
+                shared_ptr<player::PLAYER> (
+                    new player::PLAYER(0,pc1,  /*задаются в json*/ Direction(0),0,0)
+                    ));
+    PositionCoord pc2((max2.x + min2.x)/2,(max2.y + min2.y)/2);
+    this->createPlayer(
+                pc2,
+                shared_ptr<player::PLAYER> (
+                    new player::PLAYER(1,pc2,  /*задаются в json*/ Direction(0),0,0)
+                    ));
+
+    return false;
 }
 
 bool TMap::loadConfig(string config) {
@@ -59,56 +119,53 @@ bool TMap::loadConfig(string config) {
     fclose(fp);
 
     if(doc.HasParseError()) {
-        return 0;
+        return false;
     }
     auto& dmap = doc["map"];
 
-    this->sizex = dmap["sizex"].GetInt();
-    this->sizey = dmap["sizey"].GetInt();
-
-    auto& jWalls = dmap["walls"];
-    int block_size = dmap["block_size"].GetInt();
-    for(unsigned int i = 0; i < jWalls.Size(); i++) {
-        auto& w = jWalls[i];
-        int type = w["type"].GetInt();
-        auto& xy1 = w["xy"][0];
-        auto& xy2 = w["xy"][1];
-        int x1 = xy1[0].GetInt();
-        int x2 = xy2[0].GetInt();
-        int y1 = xy1[1].GetInt();
-        int y2 = xy2[1].GetInt();
-        for(int k = x1; k <= x2; k++) {
-            for(int l = y1; l <= y2; l++) {
-                for(int o = 0; o < block_size; o++) {
-                    for(int p = 0; p < block_size; p++) {
-                        printf("new Wall [%d, %d]\n", block_size*k + o, block_size*l+p);
-                        this->createWall(
-                            PositionCoord(block_size*k + o, block_size*l+p),
-                            shared_ptr<Wall>(new Wall(type))
-                        );
-                    }
-                }
-            }
-        }
+    auto& jpt = dmap["player_types"];
+    for(unsigned int i = 0; i < jpt.Size(); i++) {
+        auto& pt = jpt[i];
+        PLAYER_TYPE_STRUCT pts;
+        pts.default_hp = pt["default_hp"].GetInt();
+        pts.tank_size = pt["tank_size"].GetInt();
+        pts.velocity = pt["velocity"].GetInt();
+        pts.bullet_type_id = pt["bullet_type"].GetInt();
+        this->player_types_database[i] = pts;
     }
+
+    auto& jbt = dmap["bullet_types"];
+    for(unsigned int i = 0; i < jpt.Size(); i++) {
+        auto& bt = jbt[i];
+        BULLET_TYPE_STRUCT bts;
+        bts.damage = bt["damage"].GetInt();
+        bts.damage_size = bt["damage_size"].GetInt();
+        bts.velocity = bt["velocity"].GetInt();
+        this->bullet_types_database[i] = bts;
+    }
+
+    string square = dmap["square"].GetString();
+    if(!this->loadSquare(square)) {
+        return false;
+    }
+
     auto& jPlayers = dmap["players"];
     for(unsigned int i = 0; i < jPlayers.Size(); i++) {
         auto& p = jPlayers[i];
-        auto xy = PositionCoord(p["xy"][0].GetInt(), p["xy"][1].GetInt());
-        auto dir = (Direction) p["dir"].GetInt();
+        auto dir = p["dir"].GetInt();
         auto type = p["type"].GetInt();
-        auto btype = dmap["player_types"][type]["bullet_type"].GetInt();
-        auto speed = dmap["player_types"][type]["speed"].GetInt();
-        (void) speed;
-        auto hp = p["health"].GetInt();
-        printf("new Player [%d, %d]\n", xy.x, xy.y);
-        this->createPlayer(
-            xy,
-            shared_ptr<player::PLAYER>(
-                new player::PLAYER(i, xy, dir, type, btype)
-            )
-        );
+        printf("new Player[%d]\n", i);
+        this->forEachPlayer([&](PositionCoord pc, shared_ptr<player::PLAYER> p) {
+            (void)pc;
+            if(p->getPlayerId() == i) {
+                p->setCurrentDirection(Direction(dir));
+                p->setPlayerType(type);
+            }
+        });
     }
+
+
+
     return true;
 }
 

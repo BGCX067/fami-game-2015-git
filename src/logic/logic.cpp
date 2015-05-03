@@ -54,16 +54,16 @@ void Logic::run()
         for(size_t i = 0; i < traceLength; i++) {
             switch (bulDirect) {
             case Direction::Up:
-                intermediatePos.y += i;
+                intermediatePos.y += static_cast<int>(i);
                 break;
             case Direction::Down:
-                intermediatePos.y -= i;
+                intermediatePos.y -= static_cast<int>(i);
                 break;
             case Direction::Right:
-                intermediatePos.x += i;
+                intermediatePos.x += static_cast<int>(i);
                 break;
             case Direction::Left:
-                intermediatePos.x -= i;
+                intermediatePos.x -= static_cast<int>(i);
                 break;
             }
             if(!_currentMap->isEmpty(intermediatePos)) {
