@@ -38,7 +38,7 @@ HEADERS  += tanksgui.h \
     graph/spritemanager.h \
     graph/graphinclude.h
 
-INCLUDEPATH += ../libs/rapidjson/include
+INCLUDEPATH += ../libs
 
 FORMS    += tanksgui.ui
 
