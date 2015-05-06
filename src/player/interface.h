@@ -22,7 +22,7 @@ namespace player
 		bullet_type bullet_type_id;
 
     public:
-        PLAYER(t_player_number, PositionCoord, Direction, hit_points, player_type, bullet_type);
+        PLAYER(t_player_number, PositionCoord, Direction, player_type, bullet_type);
 
         t_player_number getPlayerId();
 
@@ -37,6 +37,8 @@ namespace player
 		bullet_type getBulletType();
 
         unsigned int getSize();
+
+		unsigned int getVelocity();
 
         bool RecieveDamage(bullet_type);
 

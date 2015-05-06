@@ -17,6 +17,8 @@ typedef int hit_points;
 struct PLAYER_TYPE_STRUCT
 {
     unsigned int tank_size;
+	hit_points default_hp;
+	unsigned int velocity;
 };
 
 struct BULLET_TYPE_STRUCT

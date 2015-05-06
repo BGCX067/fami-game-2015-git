@@ -105,7 +105,7 @@ bool TMap::loadConfig(string config) {
         this->createPlayer(
             xy,
             shared_ptr<player::PLAYER>(
-                new player::PLAYER(i, xy, dir, hp, type, btype)
+                new player::PLAYER(i, xy, dir, type, btype)
             )
         );
     }
