@@ -13,8 +13,11 @@ TanksGUI::TanksGUI(QWidget *parent) :
     logic_flag = 0;
     ui->setupUi(this);
     ui->graphicsView->setGeometry(0, 0 , 775, 436);
+
     // Инициализация карты(testing)
     MapModule = make_shared<tmap::TMap>();
+    ui->graphicsView->init(MapModule);
+
     setFocus();
 }
 
@@ -25,6 +28,7 @@ TanksGUI::~TanksGUI()
 
 void TanksGUI::resizeEvent(QResizeEvent * resizeEvent)
 {
+    (void) resizeEvent;
     int sizeh = this->ui->graphicsView->height();
     int sizew = this->ui->graphicsView->width();
 //    qDebug() << "GUI:" << sizeh << " " << sizew;
@@ -40,21 +44,16 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_W :{
                 //printf("BUTTON_W!!!\n");
                 guicmd.player_id = 1;   guicmd.cmd_code = 1;    guicmd.desc = GUICommand::Up;
-                //Logic::getNextCommandFromGUI(guicmd);
-                //Команде gui: это тестовый пример того, как должны посылаться команды в логику
-                //сделайте так же и для других клавиш
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
                 LogicModule->setNextCommandFromGUI(testCommand);
-                //===================================
                 break;
             };
 
             case Qt::Key_A :{
                 //printf("BUTTON_A!!!\n");
                 guicmd.player_id = 1;   guicmd.cmd_code = 2;    guicmd.desc = GUICommand::Left;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
@@ -66,7 +65,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_S :{
                 //printf("BUTTON_S!!!\n");
                 guicmd.player_id = 1;   guicmd.cmd_code = 3;    guicmd.desc = GUICommand::Down;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
@@ -78,7 +76,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_D :{
                 //printf("BUTTON_D!!!\n");
                 guicmd.player_id = 1;   guicmd.cmd_code = 4;    guicmd.desc = GUICommand::Right;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
@@ -90,7 +87,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_Space :{
                 //printf("BUTTON_FIRE_IN_THE_HOLE!!!\n");
                 guicmd.player_id = 1;   guicmd.cmd_code = 10;    guicmd.desc = GUICommand::Atack;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
@@ -102,7 +98,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_Left :{
                 //printf("BUTTON_LEFT!!!\n");
                 guicmd.player_id = 2;   guicmd.cmd_code = 5;    guicmd.desc = GUICommand::Left;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
@@ -114,7 +109,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_Up :{
                 //printf("BUTTON_UP!!!\n");
                 guicmd.player_id = 2;   guicmd.cmd_code = 6;    guicmd.desc = GUICommand::Up;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
@@ -126,7 +120,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_Right :{
                 //printf("BUTTON_RIGHT!!!\n");
                 guicmd.player_id = 2;   guicmd.cmd_code = 7;    guicmd.desc = GUICommand::Right;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);
@@ -138,7 +131,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
             case Qt::Key_Down :{
                 //printf("BUTTON_DOWN!!!\n");
                 guicmd.player_id = 2;   guicmd.cmd_code = 8;    guicmd.desc = GUICommand::Down;
-                //Logic::getNextCommandFromGUI(guicmd);
                 CommandFromGUI testCommand;
                 testCommand.setPlayerNumber(guicmd.player_id);
                 testCommand.setFromGUICommand(guicmd.desc);

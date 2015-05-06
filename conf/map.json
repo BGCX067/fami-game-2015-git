@@ -1,6 +1,6 @@
 {
     "map": {
-        "square": "/conf/square.tmap",
+        "square": "../conf/square.tmap",
         "players": [{
             "dir": 1,
             "type": 0

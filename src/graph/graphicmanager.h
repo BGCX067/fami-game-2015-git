@@ -5,6 +5,7 @@
 #include "sprite.h"
 #include "interface.h"
 #include "../map/interface.h"
+#include "../player/interface.h"
 #include <QGLWidget>
 
 class graphicManager : public QGLWidget, public graph::graphicManager
@@ -13,13 +14,13 @@ public:
     explicit graphicManager(QWidget *parent);
     ~graphicManager();
 
-    void init(tmap::TMap *mapObject);
+    void init(shared_ptr<tmap::TMap> mapObject);
     void render();
     void free();
 
-    void drawWall(PositionCoord, std::shared_ptr<class WallObject>);
-    void drawTank(PositionCoord, std::shared_ptr<class Player>);
-    void drawBullet(PositionCoord, std::shared_ptr<class Bullet>);
+    void drawWall(PositionCoord, std::shared_ptr<Wall>);
+    void drawTank(PositionCoord, std::shared_ptr<player::PLAYER>);
+    void drawBullet(PositionCoord, std::shared_ptr<player::BULLET>);
 
 protected:
     void initializeGL();
@@ -53,7 +54,7 @@ private:
 
     float viewportScaleFactor = 1;
     GLuint currentSprite;
-    tmap::TMap *_map;
+    shared_ptr<tmap::TMap> _map;
 };
 
 #endif // GRAPHICMANAGER_H

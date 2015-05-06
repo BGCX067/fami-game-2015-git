@@ -10,22 +10,25 @@ graphicManager::~graphicManager()
 
 }
 
-void graphicManager::drawWall(PositionCoord, std::shared_ptr<WallObject>)
+void graphicManager::drawWall(PositionCoord pc, std::shared_ptr<Wall> w)
 {
-    drawRect(50.0, 50.0, 10.0, 10.0, 1.0, 0.5, 0.0, 1.0);
+    if(w->getType() == 0)
+        drawRect(pc.x*10, pc.y*10, 10.0, 10.0, 0.0, 1.0, 0.0, 1.0);
+    else
+        drawRect(pc.x*10, pc.y*10, 10.0, 10.0, 1.0, 0.5, 0.0, 1.0);
 }
 
-void graphicManager::drawTank(PositionCoord, std::shared_ptr<Player>)
+void graphicManager::drawTank(PositionCoord pc, std::shared_ptr<player::PLAYER> p)
 {
-    drawRect(20.0, 30.0, 10.0, 10.0, 0.0, 0.8, 0.1, 1.0);
+    drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.0, 0.3, 0.9, 1.0);
 }
 
-void graphicManager::drawBullet(PositionCoord, std::shared_ptr<Bullet>)
+void graphicManager::drawBullet(PositionCoord pc, std::shared_ptr<player::BULLET> b)
 {
-    drawRect(70.0, 20.0, 10.0, 10.0, 0.5, 0.5, 0.5, 1.0);
+    drawRect(pc.x*10, pc.y*10, 5.0, 5.0, 0.5, 0.5, 0.5, 1.0);
 }
 
-void graphicManager::init(tmap::TMap *mapObject)
+void graphicManager::init(shared_ptr<tmap::TMap> mapObject)
 {
     _map = mapObject;
     initializeGL();

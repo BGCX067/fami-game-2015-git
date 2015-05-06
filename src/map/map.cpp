@@ -37,8 +37,10 @@ int TMap::getSizeY() {
 }
 
 bool TMap::loadSquare(string square) {
-    fstream sq(square);
-
+    fstream sq(square, std::fstream::in);
+    if(sq.fail()) {
+        return false;
+    }
     sq >> this->sizex >> this->sizey;
 
     PositionCoord
@@ -48,9 +50,11 @@ bool TMap::loadSquare(string square) {
             min2(this->sizex, this->sizey);
 
     char point;
-    for(int i = 0; i < this->sizex; i++) {
-        for(int j = 0; j < this->sizey; j++) {
+    for(int j = 0; j < this->sizey; j++) {
+        for(int i = 0; i < this->sizex; i++) {
            sq >> point;
+           if(point == '\t' || point == '\n')
+               sq >> point;
            switch(point) {
            case 'o':
                this->createWall(
@@ -87,13 +91,13 @@ bool TMap::loadSquare(string square) {
     this->createPlayer(
                 pc1,
                 shared_ptr<player::PLAYER> (
-                    new player::PLAYER(0,pc1,  /*задаются в json*/ Direction(0),0,0)
+                    new player::PLAYER(1,pc1,  /*задаются в json*/ Direction(0),0,0)
                     ));
     PositionCoord pc2((max2.x + min2.x)/2,(max2.y + min2.y)/2);
     this->createPlayer(
                 pc2,
                 shared_ptr<player::PLAYER> (
-                    new player::PLAYER(1,pc2,  /*задаются в json*/ Direction(0),0,0)
+                    new player::PLAYER(2,pc2,  /*задаются в json*/ Direction(0),0,0)
                     ));
 
     return false;
@@ -157,7 +161,7 @@ bool TMap::loadConfig(string config) {
         printf("new Player[%d]\n", i);
         this->forEachPlayer([&](PositionCoord pc, shared_ptr<player::PLAYER> p) {
             (void)pc;
-            if(p->getPlayerId() == i) {
+            if(p->getPlayerId() == i + 1) {
                 p->setCurrentDirection(Direction(dir));
                 p->setPlayerType(type);
             }
