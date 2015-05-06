@@ -20,7 +20,11 @@ void graphicManager::drawWall(PositionCoord pc, std::shared_ptr<Wall> w)
 
 void graphicManager::drawTank(PositionCoord pc, std::shared_ptr<player::PLAYER> p)
 {
-    drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.0, 0.3, 0.9, 1.0);
+    switch(p->getPlayerId()) {
+    case 1: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.0, 0.0, 0.9, 1.0); break;
+    case 2: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.9, 0.0, 0.0, 1.0); break;
+    default: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.5, 0.5, 0.5, 1.0); break;
+    }
 }
 
 void graphicManager::drawBullet(PositionCoord pc, std::shared_ptr<player::BULLET> b)
