@@ -134,7 +134,7 @@ void Logic::run()
             if(pPlayer->getCurrentDirection() == dir) {
                 // не стреляли мы в ту сторону
                 qDebug() << "LOGIC: Move command\n";
-                if(playerFire[playerNumber].second.find(dir) == playerFire[playerNumber].second.end()) {
+                if(playerFire[playerNumber-1].second.find(dir) == playerFire[playerNumber-1].second.end()) {
                     pPlayer->Move(_currentMap.get());
                     qDebug() << "LOGIC: MOVE end\n";
                 }
