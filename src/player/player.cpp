@@ -138,7 +138,7 @@ void PLAYER::Turn(Direction direction)
 
 shared_ptr<BULLET> PLAYER::Attack()
 {
-    qDebug() << "PLAYER: Attack started\n";
+    qDebug() << "PLAYER: Attack started player coords: " << player_pos.x << " " << player_pos.y << endl;
     auto size = tmap::TMap::getPlayerType(player_type_id).tank_size;
     PositionCoord start_pos;
     int s = ((int)size - 1) / 2;
@@ -147,22 +147,22 @@ shared_ptr<BULLET> PLAYER::Attack()
     {
     case Direction::Left:
     {
-        start_pos = PositionCoord(start_pos.x - s - 1, start_pos.y);
+        start_pos = PositionCoord(player_pos.x - s - 1, player_pos.y);
         break;
     }
     case Direction::Right:
     {
-        start_pos = PositionCoord(start_pos.x + s + 1, start_pos.y);
+        start_pos = PositionCoord(player_pos.x + s + 1, player_pos.y);
         break;
     }
     case Direction::Up:
     {
-        start_pos = PositionCoord(start_pos.x, start_pos.y + s + 1);
+        start_pos = PositionCoord(player_pos.x, player_pos.y + s + 1);
         break;
     }
     case Direction::Down:
     {
-        start_pos = PositionCoord(start_pos.x, start_pos.y - s - 1);
+        start_pos = PositionCoord(player_pos.x, player_pos.y - s - 1);
         break;
     }
     }
