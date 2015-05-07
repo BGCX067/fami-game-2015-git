@@ -13,12 +13,12 @@ TanksGUI::TanksGUI(QWidget *parent) :
     logic_flag = 0;
     ui->setupUi(this);
     ui->graphicsView->setGeometry(0, 0 , 775, 436);
-
+    setFocus();
     // Инициализация карты(testing)
     MapModule = make_shared<tmap::TMap>();
     ui->graphicsView->init(MapModule);
 
-    setFocus();
+
 }
 
 TanksGUI::~TanksGUI()
@@ -37,6 +37,7 @@ void TanksGUI::resizeEvent(QResizeEvent * resizeEvent)
 
 void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
 {
+    qDebug() << "GUI: keyPressEvent. Logic : "<< logic_flag << endl;
     if (logic_flag == 1)
     {
         switch(keyEvent->key())
@@ -139,7 +140,7 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
                 break;
             };
 
-            case Qt::Key_0 :{
+            case Qt::Key_I :{
                 //printf("FIRE_IN_THE_HOLE!!!\n");
                 guicmd.player_id = 2;   guicmd.cmd_code = 9;    guicmd.desc = GUICommand::Atack;
 
@@ -198,6 +199,7 @@ void TanksGUI::on_pushButton_clicked()
         testCommand.setFromGUICommand(guicmd.desc);
         LogicModule->setNextCommandFromGUI(testCommand);
     }
+    setFocus();
 }
 
 // Кнопка "Stop Game"
@@ -242,7 +244,7 @@ void TanksGUI::on_actionDownload_Map_triggered()
 
 // Обработка событий по основному игровому таймеру
 void TanksGUI::timer_event() {
-    qDebug() << "Timer event";
+   // qDebug() << "Timer event";
     LogicModule->run();
     ui->graphicsView->render();
 }

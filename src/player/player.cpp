@@ -1,4 +1,5 @@
 #include "interface.h"
+#include <QDebug>
 
 using namespace player;
 
@@ -70,10 +71,13 @@ void PLAYER::setCurrentDirection(Direction dir) {
 
 void PLAYER::Move(tmap::TMap* map_)
 {
+    qDebug() << "PLAYER: move, id = " << player_id << endl;
     PositionCoord newPosition, checkPosition;
     Direction d;
     auto size = tmap::TMap::getPlayerType(player_type_id).tank_size;
     int s = (size - 1) / 2;
+
+    qDebug() << "PLAYER: tank size = " << size << endl;
 
     switch (player_direction)
     {
@@ -108,11 +112,23 @@ void PLAYER::Move(tmap::TMap* map_)
         }
     }
 
+    qDebug() << "PLAYER: cur position " << player_pos.x << " " << player_pos.y << endl;
+    qDebug() << "PLAYER: new position " << newPosition.x << " " << newPosition.y << endl;
+
     if (map_->isEmptyRow(size, checkPosition, d))
     {
+        map_->resetPlayerPosition(player_pos, newPosition);
+        qDebug() << "PLAYER: new position valide "<< endl;
         player_pos.x = newPosition.x;
         player_pos.y = newPosition.y;
+
+
     }
+    else
+         qDebug() << "PLAYER: new position invalide "<< endl;
+
+    qDebug() << "PLAYER: MOVE end\n";
+
 }
 
 void PLAYER::Turn(Direction direction)
@@ -122,9 +138,10 @@ void PLAYER::Turn(Direction direction)
 
 shared_ptr<BULLET> PLAYER::Attack()
 {
+    qDebug() << "PLAYER: Attack started\n";
     auto size = tmap::TMap::getPlayerType(player_type_id).tank_size;
     PositionCoord start_pos;
-    int s = (size - 1) / 2;
+    int s = ((int)size - 1) / 2;
 
     switch (player_direction)
     {
@@ -149,5 +166,6 @@ shared_ptr<BULLET> PLAYER::Attack()
         break;
     }
     }
+    qDebug() << "PLAYER: bullet position " << start_pos.x << " " << start_pos.y << endl;
     return make_shared<BULLET>(player_id, bullet_type_id, start_pos, player_direction);
 }

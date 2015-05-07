@@ -2,6 +2,7 @@
 #include "rapidjson/document.h"
 #include "rapidjson/filereadstream.h"
 #include <fstream>
+#include <QDebug>
 
 using namespace tmap;
 
@@ -14,6 +15,14 @@ PLAYER_TYPE_STRUCT TMap::getPlayerType(player_type pt) {
 
 BULLET_TYPE_STRUCT TMap::getBulletType(bullet_type pt) {
     return bullet_types_database[pt];
+}
+
+void TMap::resetPlayerPosition(PositionCoord old_p, PositionCoord new_p) {
+
+   auto player = players[old_p.x][old_p.y];
+   players[new_p.x][new_p.y] = player;
+   players[old_p.x].erase(old_p.y);
+
 }
 
 bool TMap::init(int level) {
@@ -174,17 +183,25 @@ bool TMap::loadConfig(string config) {
 }
 
 bool TMap::isEmpty(PositionCoord coord) {
+    qDebug() << "MAP: isEmpty started coords: " << coord.x << " " << coord.y << endl;
     auto wallsX = walls.find(coord.x);
-    if (wallsX == walls.end()) return true;
+    if (wallsX == walls.end()) {
+        qDebug() << "MAP: no wall here, x checked\n";
+        return true;
+    }
     auto wallsY = wallsX->second;
-    if (wallsY.find(coord.y) == wallsY.end()) return true;
+    if (wallsY.find(coord.y) == wallsY.end()) {
+         qDebug() << "MAP: no wall here, x,y checked\n";
+        return true;
+    }
+    qDebug() << "MAP: wall here\n";
     return false;
 }
 
 //Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
 bool TMap::isEmptyRow(int n, PositionCoord coord, Direction a) {
     (void)n; (void)coord; (void)a;
-    return false;
+    return true;
 }
 
 void TMap::forEachWall(function<void(PositionCoord, shared_ptr<Wall>) > f) {
@@ -234,6 +251,19 @@ shared_ptr<player::PLAYER> TMap::getPlayer(PositionCoord pc) {
 shared_ptr<player::BULLET> TMap::getBullet(PositionCoord pc) {
     return bullets[pc.x][pc.y];
 }
+
+shared_ptr<player::PLAYER> TMap::getPlayer(t_player_number player_id) {
+   shared_ptr<player::PLAYER> p;
+   forEachPlayer([&](PositionCoord pc, shared_ptr<player::PLAYER> cur_p)->void {
+        if (cur_p->getPlayerId() == player_id)
+            p = cur_p;
+         }
+
+    );
+
+   return p;
+}
+
 
 bool TMap::deleteWall(PositionCoord coord) {
     const auto& wallsX = walls.find(coord.x);

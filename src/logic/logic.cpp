@@ -23,6 +23,7 @@ LOGICCommand Logic::getStatusForGUI()
 void Logic::setNextCommandFromGUI(CommandFromGUI g_commandFromGUI)
 {
     _commandsFromGUI.push(g_commandFromGUI);
+    qDebug() << "LOGIC: Put command, command count " <<_commandsFromGUI.size() << endl;
 }
 
 void Logic::run()
@@ -115,24 +116,34 @@ void Logic::run()
     //хранит флаг наличия стрельбы и напрвления стрельбы
     array<pair<bool, set<Direction> >, 2> playerFire; //не оптимально, надо будет, исправим
     // Обработка очереди команд
+
+    if (_commandsFromGUI.size() > 0)
+        qDebug() << "LOGIC: commands count: " << _commandsFromGUI.size() << endl;
+
     while(!_commandsFromGUI.empty()) {
 
-        CommandFromGUI currCommand = _commandsFromGUI.back();
+        CommandFromGUI currCommand = _commandsFromGUI.front();
         _commandsFromGUI.pop();
         size_t playerNumber = currCommand.getPlayerNumber();
+        qDebug() << "LOGIC: command player id = " << playerNumber << endl;
 
         auto GUICommandMove = [&](Direction dir)->void {
-            _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
-                if(pPlayer->getPlayerId() == playerNumber) {
-                    if(pPlayer->getCurrentDirection() == dir) {
-                        // не стреляли мы в ту сторону
-                        if(playerFire[playerNumber].second.find(dir) == playerFire[playerNumber].second.end())
-                            pPlayer->Move(_currentMap.get());
-                    }
-                    else
-                        pPlayer->Turn(dir);
+            qDebug() << "LOGIC: Command move, procces players\n";
+
+            auto pPlayer = _currentMap->getPlayer(playerNumber);
+            if(pPlayer->getCurrentDirection() == dir) {
+                // не стреляли мы в ту сторону
+                qDebug() << "LOGIC: Move command\n";
+                if(playerFire[playerNumber].second.find(dir) == playerFire[playerNumber].second.end()) {
+                    pPlayer->Move(_currentMap.get());
+                    qDebug() << "LOGIC: MOVE end\n";
                 }
-            });
+            }
+            else {
+                qDebug() << "LOGIC:\tTurn command\n";
+                pPlayer->Turn(dir);
+            }
+
         };
 
         switch(currCommand.getGUICommand()){
@@ -150,6 +161,7 @@ void Logic::run()
             GUICommandMove(Direction::Right);
             break;
         case GUICommand::Atack:
+            qDebug() << "LOGIC: Attack command\n";
             _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
                 if(pPlayer->getPlayerId() == playerNumber) {
                     //Стреляли… Саид(c)
@@ -166,4 +178,5 @@ void Logic::run()
             break;
         }
     }
+  //  qDebug() << "LOGIC: run end\n";
 }

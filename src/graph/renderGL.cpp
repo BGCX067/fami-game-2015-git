@@ -13,4 +13,5 @@ void graphicManager::paintGL()
     _map->forEachBullet([&](PositionCoord pc, std::shared_ptr<player::BULLET> b){
         drawBullet(pc,b);
     });
+   // qDebug() << "GRAPH: painted\n";
 }
