@@ -61,12 +61,12 @@ void BULLET::Move()
 	}
 	case Direction::Up:
 	{
-		bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y + 1);
+        bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y + 1);
 		break;
 	}
 	case Direction::Down:
 	{
-		bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y - 1);
+        bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y - 1);
 		break;
 	}
 	}

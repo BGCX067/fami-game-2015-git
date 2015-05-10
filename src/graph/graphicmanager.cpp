@@ -29,6 +29,7 @@ void graphicManager::drawTank(PositionCoord pc, std::shared_ptr<player::PLAYER> 
 
 void graphicManager::drawBullet(PositionCoord pc, std::shared_ptr<player::BULLET> b)
 {
+    (void)b;
     drawRect(pc.x*10, pc.y*10, 5.0, 5.0, 0.5, 0.5, 0.5, 1.0);
 }
 

@@ -96,17 +96,17 @@ void PLAYER::Move(tmap::TMap* map_)
             d = Direction::Up;
             break;
         }
+    case Direction::Up:
+        {
+            checkPosition = PositionCoord(player_pos.x, player_pos.y + s + 1);
+            newPosition = PositionCoord(player_pos.x, player_pos.y + 1);
+            d = Direction::Right;
+            break;
+        }
     case Direction::Down:
         {
             checkPosition = PositionCoord(player_pos.x, player_pos.y - s - 1);
             newPosition = PositionCoord(player_pos.x, player_pos.y - 1);
-            d = Direction::Right;
-            break;
-        }
-    case Direction::Up:
-        {
-            checkPosition = PositionCoord(player_pos.x, player_pos.y +  s + 1);
-            newPosition = PositionCoord(player_pos.x, player_pos.y + 1);
             d = Direction::Right;
             break;
         }
@@ -117,7 +117,7 @@ void PLAYER::Move(tmap::TMap* map_)
 
     if (map_->isEmptyRow(size, checkPosition, d))
     {
-        map_->resetPlayerPosition(player_pos, newPosition);
+        map_->movePlayer(player_pos, newPosition);
         qDebug() << "PLAYER: new position valide "<< endl;
         player_pos.x = newPosition.x;
         player_pos.y = newPosition.y;

@@ -82,17 +82,26 @@ void Logic::run()
                 //может это стенка ?!
                 shared_ptr<Wall> pWall = _currentMap->getWall(intermediatePos);
                 if(pWall) {
-                    if(pWall->getType() == 1) //кирпичная стенка
+                    if(pWall->getType() == 0) //кирпичная стенка
                         //хана стенке
                         _currentMap->deleteWall(intermediatePos);
                 }
                 //или кранты танку?
-                shared_ptr<player::PLAYER> pPlayer = _currentMap->getPlayer(intermediatePos);
-                if(pPlayer) {
-                    // По танку вдарила болванка, Прощай родимый экипаж.
-                    if(pPlayer->RecieveDamage(bul->getDamage()) == 1)
-                        _currentMap->deletePlayer(intermediatePos);
-                }
+                _currentMap->forEachPlayer([&](PositionCoord pc, shared_ptr<player::PLAYER> pPlayer) {
+                    int psize = pPlayer->getSize();
+                    int k = (psize - 1) / 2;
+                    for(int i = pc.x - k; i <= pc.x + k; i++) {
+                        for(int j = pc.y - k; j <= pc.y + k; j++) {
+                            PositionCoord curCoord(i, j);
+                            if(curCoord == intermediatePos) {
+                                qDebug("LOGIC: Damage to tank #%d. Current hp: %d", pPlayer->getPlayerId(), pPlayer->getCurrentHitPoints());
+                                // По танку вдарила болванка, Прощай родимый экипаж.
+                                if(pPlayer->RecieveDamage(bul->getDamage()) == 1)
+                                    _currentMap->deletePlayer(pc);
+                            }
+                        }
+                    }
+                });
                 _currentMap->deleteBullet(pc);
                 // снаряд взорвался, дальше считать бессмысленно
                 break;
@@ -101,88 +110,88 @@ void Logic::run()
     });
 
     // Проверка состояния игры
-    bool player1Dead = true, player2Dead = true;
-    _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
-        if(pPlayer->getPlayerId() == 1) player1Dead = false;
-        if(pPlayer->getPlayerId() == 2) player2Dead = false;
-    });
-    if(player1Dead)
-        if(player2Dead)
+    if(!_currentMap->getPlayer(1)) {
+        if(!_currentMap->getPlayer(2)) {
+            qDebug("LOGICCommand::GAME_OVER");
             _gameStatus = LOGICCommand::GAME_OVER;
-        else
+        } else {
+            qDebug("LOGICCommand::PLAYER_2_WIN");
             _gameStatus = LOGICCommand::PLAYER_2_WIN;
-    else
-        if(player2Dead)
+        }
+    } else {
+        if(!_currentMap->getPlayer(2)) {
+            qDebug("LOGICCommand::PLAYER_1_WIN");
             _gameStatus = LOGICCommand::PLAYER_1_WIN;
+        } else {
+            //хранит флаг наличия стрельбы и напрвления стрельбы
+            array<pair<bool, set<Direction> >, 2> playerFire; //не оптимально, надо будет, исправим
+            // Обработка очереди команд
 
-    //хранит флаг наличия стрельбы и напрвления стрельбы
-    array<pair<bool, set<Direction> >, 2> playerFire; //не оптимально, надо будет, исправим
-    // Обработка очереди команд
+            if (_commandsFromGUI.size() > 0)
+                qDebug() << "LOGIC: commands count: " << _commandsFromGUI.size() << endl;
 
-    if (_commandsFromGUI.size() > 0)
-        qDebug() << "LOGIC: commands count: " << _commandsFromGUI.size() << endl;
+            // обрабатывем команды, доступные на текущих квант времени
+            size_t currCommandCount = _commandsFromGUI.size();
+            while(currCommandCount > 0) {
+                currCommandCount --;
 
-    // обрабатывем команды, доступные на текущих квант времени
-    size_t currCommandCount = _commandsFromGUI.size();
-    while(currCommandCount > 0) {
-        currCommandCount --;
+                CommandFromGUI currCommand = _commandsFromGUI.front();
+                _commandsFromGUI.pop();
+                size_t playerNumber = currCommand.getPlayerNumber();
+                qDebug() << "LOGIC: command player id = " << playerNumber << endl;
 
-        CommandFromGUI currCommand = _commandsFromGUI.front();
-        _commandsFromGUI.pop();
-        size_t playerNumber = currCommand.getPlayerNumber();
-        qDebug() << "LOGIC: command player id = " << playerNumber << endl;
+                auto GUICommandMove = [&](Direction dir)->void {
+                    qDebug() << "LOGIC: Command move, procces players\n";
 
-        auto GUICommandMove = [&](Direction dir)->void {
-            qDebug() << "LOGIC: Command move, procces players\n";
+                    auto pPlayer = _currentMap->getPlayer(playerNumber);
+                    if(pPlayer->getCurrentDirection() == dir) {
+                        // не стреляли мы в ту сторону
+                        qDebug() << "LOGIC: Move command\n";
+                        if(playerFire[playerNumber-1].second.find(dir) == playerFire[playerNumber-1].second.end()) {
+                            pPlayer->Move(_currentMap.get());
+                            qDebug() << "LOGIC: MOVE end\n";
+                        }
+                    }
+                    else {
+                        qDebug() << "LOGIC:\tTurn command\n";
+                        pPlayer->Turn(dir);
+                    }
 
-            auto pPlayer = _currentMap->getPlayer(playerNumber);
-            if(pPlayer->getCurrentDirection() == dir) {
-                // не стреляли мы в ту сторону
-                qDebug() << "LOGIC: Move command\n";
-                if(playerFire[playerNumber-1].second.find(dir) == playerFire[playerNumber-1].second.end()) {
-                    pPlayer->Move(_currentMap.get());
-                    qDebug() << "LOGIC: MOVE end\n";
+                };
+
+                switch(currCommand.getGUICommand()){
+
+                case GUICommand::Up:
+                    GUICommandMove(Direction::Up);
+                    break;
+                case GUICommand::Down:
+                    GUICommandMove(Direction::Down);
+                    break;
+                case GUICommand::Left:
+                    GUICommandMove(Direction::Left);
+                    break;
+                case GUICommand::Right:
+                    GUICommandMove(Direction::Right);
+                    break;
+                case GUICommand::Atack:
+                    qDebug() << "LOGIC: Attack command\n";
+                    _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
+                        if(pPlayer->getPlayerId() == playerNumber) {
+                            //Стреляли… Саид(c)
+                            auto newBullet = pPlayer->Attack();
+                            _currentMap->createBullet(newBullet->getCurrentPosition(),newBullet);
+
+                            //теперь мы знаем куда не надо двигаться из-за отдачи
+                            playerFire[playerNumber - 1].first = true;
+                            playerFire[playerNumber - 1].second.insert(pPlayer->getCurrentDirection());
+                        }
+                    });
+                    break;
+                default:
+                    break;
                 }
             }
-            else {
-                qDebug() << "LOGIC:\tTurn command\n";
-                pPlayer->Turn(dir);
-            }
-
-        };
-
-        switch(currCommand.getGUICommand()){
-
-        case GUICommand::Up:
-            GUICommandMove(Direction::Up);
-            break;
-        case GUICommand::Down:
-            GUICommandMove(Direction::Down);
-            break;
-        case GUICommand::Left:
-            GUICommandMove(Direction::Left);
-            break;
-        case GUICommand::Right:
-            GUICommandMove(Direction::Right);
-            break;
-        case GUICommand::Atack:
-            qDebug() << "LOGIC: Attack command\n";
-            _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
-                if(pPlayer->getPlayerId() == playerNumber) {
-                    //Стреляли… Саид(c)
-                    auto newBullet = pPlayer->Attack();
-                    _currentMap->createBullet(newBullet->getCurrentPosition(),newBullet);
-
-                    //теперь мы знаем куда не надо двигаться из-за отдачи
-                    playerFire[playerNumber].first = true;
-                    playerFire[playerNumber].second.insert(pPlayer->getCurrentDirection());
-                }
-            });
-            break;
-        default:
-            break;
         }
     }
     _logicRun.unlock();
-  //  qDebug() << "LOGIC: run end\n";
 }

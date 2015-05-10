@@ -17,12 +17,10 @@ BULLET_TYPE_STRUCT TMap::getBulletType(bullet_type pt) {
     return bullet_types_database[pt];
 }
 
-void TMap::resetPlayerPosition(PositionCoord old_p, PositionCoord new_p) {
-
+void TMap::movePlayer(PositionCoord old_p, PositionCoord new_p) {
    auto player = players[old_p.x][old_p.y];
    players[new_p.x][new_p.y] = player;
    players[old_p.x].erase(old_p.y);
-
 }
 
 bool TMap::init(int level) {
@@ -97,17 +95,15 @@ bool TMap::loadSquare(string square) {
     sq.close();
 
     PositionCoord pc1((max1.x + min1.x)/2,(max1.y + min1.y)/2);
-    this->createPlayer(
-                pc1,
-                shared_ptr<player::PLAYER> (
-                    new player::PLAYER(1,pc1,  /*задаются в json*/ Direction(0),0,0)
-                    ));
+    auto player1 = shared_ptr<player::PLAYER> (
+                new player::PLAYER(1,pc1,  /*задаются в json*/ Direction(0),0,0)
+                );
+    this->createPlayer(pc1, player1);
     PositionCoord pc2((max2.x + min2.x)/2,(max2.y + min2.y)/2);
-    this->createPlayer(
-                pc2,
-                shared_ptr<player::PLAYER> (
-                    new player::PLAYER(2,pc2,  /*задаются в json*/ Direction(0),0,0)
-                    ));
+    auto player2 = shared_ptr<player::PLAYER> (
+                new player::PLAYER(2,pc2,  /*задаются в json*/ Direction(0),0,0)
+                );
+    this->createPlayer(pc2, player2);
 
     return false;
 }
@@ -183,24 +179,60 @@ bool TMap::loadConfig(string config) {
 }
 
 bool TMap::isEmpty(PositionCoord coord) {
-    qDebug() << "MAP: isEmpty started coords: " << coord.x << " " << coord.y << endl;
+    int a = 0;
     auto wallsX = walls.find(coord.x);
-    if (wallsX == walls.end()) {
-        qDebug() << "MAP: no wall here, x checked\n";
-        return true;
+    if (wallsX == walls.end()) { a ++; }
+    else {
+        auto wallsY = wallsX->second;
+        if (wallsY.find(coord.y) == wallsY.end()) { a ++; }
     }
-    auto wallsY = wallsX->second;
-    if (wallsY.find(coord.y) == wallsY.end()) {
-         qDebug() << "MAP: no wall here, x,y checked\n";
-        return true;
-    }
-    qDebug() << "MAP: wall here\n";
-    return false;
+
+    if(!a) return false;
+
+    bool b = true;
+
+    this->forEachPlayer([&](PositionCoord pc, shared_ptr<player::PLAYER> p) {
+        int psize = p->getSize();
+        int k = (psize - 1) / 2;
+        for(int i = pc.x - k; i <= pc.x + k; i++) {
+            for(int j = pc.y - k; j <= pc.y + k; j++) {
+                PositionCoord curCoord(i, j);
+                if(curCoord == coord) { b = false; }
+            }
+        }
+    });
+
+    return b;
 }
 
 //Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
 bool TMap::isEmptyRow(int n, PositionCoord coord, Direction a) {
-    (void)n; (void)coord; (void)a;
+    if(n%2 == 0) {
+        printf("Error. TMap::isEmptyRow. n != (2*k - 1).");
+        exit(0);
+        return false;
+    }
+    bool result = true;
+    switch(a) {
+    case Direction::Down:
+    case Direction::Up:
+        result = isEmpty(coord);
+        for(int i = 1; i <= (n-1)/2 && result; i++) {
+            result = result && isEmpty(PositionCoord(coord.x, coord.y + i));
+            result = result && isEmpty(PositionCoord(coord.x, coord.y - i));
+        }
+        return result;
+    case Direction::Left:
+    case Direction::Right:
+        result = isEmpty(coord);
+        for(int i = 1; i <= (n-1)/2 && result; i++) {
+            result = result && isEmpty(PositionCoord(coord.x + i, coord.y));
+            result = result && isEmpty(PositionCoord(coord.x - i, coord.y));
+        }
+        return result;
+    default: return true;
+    }
+
     return true;
 }
 
@@ -232,6 +264,7 @@ bool TMap::createWall(PositionCoord coord, shared_ptr<Wall> w) {
 
 bool TMap::createPlayer(PositionCoord coord, shared_ptr<player::PLAYER> p) {
     players[coord.x][coord.y] = p;
+    playersById[p->getPlayerId()] = p;
     return true;
 }
 
@@ -240,30 +273,40 @@ bool TMap::createBullet(PositionCoord coord, shared_ptr<player::BULLET> b) {
     return true;
 }
 
-shared_ptr<Wall> TMap::getWall(PositionCoord pc) {
-    return walls[pc.x][pc.y];
+shared_ptr<Wall> TMap::getWall(PositionCoord coord) {
+    const auto& wallsX = walls.find(coord.x);
+    if (wallsX == walls.end()) return shared_ptr<Wall>(nullptr_t());;
+    auto& wallsY = wallsX->second;
+    if (wallsY.find(coord.y) != wallsY.end()) {
+        return walls[coord.x][coord.y];
+    }
+    return shared_ptr<Wall>(nullptr_t());
 }
 
-shared_ptr<player::PLAYER> TMap::getPlayer(PositionCoord pc) {
-    return players[pc.x][pc.y];
+shared_ptr<player::PLAYER> TMap::getPlayer(PositionCoord coord) {
+    const auto& playersX = players.find(coord.x);
+    if (playersX == players.end())return shared_ptr<player::PLAYER>(nullptr_t());;
+    auto& playersY = playersX->second;
+    if (playersY.find(coord.y) != playersY.end()) {
+        return players[coord.x][coord.y];
+    }
+    return shared_ptr<player::PLAYER>(nullptr_t());
 }
 
-shared_ptr<player::BULLET> TMap::getBullet(PositionCoord pc) {
-    return bullets[pc.x][pc.y];
+shared_ptr<player::BULLET> TMap::getBullet(PositionCoord coord) {
+    const auto& bulletsX = bullets.find(coord.x);
+    if (bulletsX == bullets.end())
+        return shared_ptr<player::BULLET>(nullptr_t());
+    auto& bulletsY = bulletsX->second;
+    if (bulletsY.find(coord.y) != bulletsY.end()) {
+        return bullets[coord.x][coord.y];
+    }
+    return shared_ptr<player::BULLET>(nullptr_t());
 }
 
 shared_ptr<player::PLAYER> TMap::getPlayer(t_player_number player_id) {
-   shared_ptr<player::PLAYER> p;
-   forEachPlayer([&](PositionCoord pc, shared_ptr<player::PLAYER> cur_p)->void {
-        if (cur_p->getPlayerId() == player_id)
-            p = cur_p;
-         }
-
-    );
-
-   return p;
+   return this->playersById[player_id];
 }
-
 
 bool TMap::deleteWall(PositionCoord coord) {
     const auto& wallsX = walls.find(coord.x);
@@ -277,6 +320,13 @@ bool TMap::deleteWall(PositionCoord coord) {
 }
 
 bool TMap::deletePlayer(PositionCoord coord) {
+    for(map<int, shared_ptr<player::PLAYER>>::iterator p = this->playersById.begin();
+        p != this->playersById.end(); p++) {
+        if(p->second->getCurrentPosition() == coord) {
+            this->playersById.erase(p);
+            break;
+        }
+    }
     const auto& playersX = players.find(coord.x);
     if (playersX == players.end())return true;
     auto& playersY = playersX->second;

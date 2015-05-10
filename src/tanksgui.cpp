@@ -16,6 +16,7 @@ TanksGUI::TanksGUI(QWidget *parent) :
     setFocus();
     // Инициализация карты(testing)
     MapModule = make_shared<tmap::TMap>();
+    MapModule->loadConfig(DEFAULT_CONFIG_MAP);
     ui->graphicsView->init(MapModule);
 
 

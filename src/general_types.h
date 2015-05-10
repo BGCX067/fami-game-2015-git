@@ -1,5 +1,7 @@
 #pragma once
 
+#define DEFAULT_CONFIG_MAP "../conf/map.json"
+
 /*
 Описание типов, общих для нескольких подсистем
 */

@@ -24,6 +24,8 @@ namespace tmap {
         map<int, map<int, shared_ptr<player::PLAYER>>> players;
         map<int, map<int, shared_ptr<player::BULLET>>> bullets;
 
+        map<int, shared_ptr<player::PLAYER>> playersById;
+
         static map<player_type, PLAYER_TYPE_STRUCT> player_types_database;
         static map<bullet_type, BULLET_TYPE_STRUCT> bullet_types_database;
 
@@ -53,7 +55,7 @@ namespace tmap {
         bool createPlayer(PositionCoord, shared_ptr<player::PLAYER>);
         bool createBullet(PositionCoord, shared_ptr<player::BULLET>);
 
-        void resetPlayerPosition(PositionCoord, PositionCoord);
+        void movePlayer(PositionCoord, PositionCoord);
 
         shared_ptr<Wall> getWall(PositionCoord);
         shared_ptr<player::PLAYER> getPlayer(PositionCoord);
