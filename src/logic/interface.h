@@ -2,6 +2,7 @@
 
 #include <string>
 #include <queue>
+#include <mutex>
 #include "../map/interface.h"
 using namespace std;
 /*
@@ -27,7 +28,9 @@ public:
 private:
     LOGICCommand _gameStatus;                                       // Текущий статус игры
     queue<CommandFromGUI> _commandsFromGUI;                         // Очередь gui комманд
-    shared_ptr<tmap::TMap> _currentMap;
+    shared_ptr<tmap::TMap> _currentMap;                             // Ссылка на глобальную карту
+
+    mutex _logicRun;
 };
 
 }

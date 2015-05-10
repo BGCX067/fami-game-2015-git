@@ -28,6 +28,8 @@ void Logic::setNextCommandFromGUI(CommandFromGUI g_commandFromGUI)
 
 void Logic::run()
 {
+    if(!_logicRun.try_lock())
+        return;
     // Просчет разрушений с прошлого шага
     _currentMap->forEachBullet([&](PositionCoord pc, shared_ptr<player::BULLET> bul)->void {
         PositionCoord prevPos = bul->getCurrentPosition(); // позиция на прошлом шаге
@@ -120,7 +122,10 @@ void Logic::run()
     if (_commandsFromGUI.size() > 0)
         qDebug() << "LOGIC: commands count: " << _commandsFromGUI.size() << endl;
 
-    while(!_commandsFromGUI.empty()) {
+    // обрабатывем команды, доступные на текущих квант времени
+    size_t currCommandCount = _commandsFromGUI.size();
+    while(currCommandCount > 0) {
+        currCommandCount --;
 
         CommandFromGUI currCommand = _commandsFromGUI.front();
         _commandsFromGUI.pop();
@@ -178,5 +183,6 @@ void Logic::run()
             break;
         }
     }
+    _logicRun.unlock();
   //  qDebug() << "LOGIC: run end\n";
 }
