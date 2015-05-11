@@ -37,6 +37,9 @@ void Logic::run()
         PositionCoord curPos = bul->getCurrentPosition(); //возможная текущая позиция
         size_t traceLength = 0; //длинна пути
         Direction bulDirect = bul->getDirection();
+
+        qDebug() << "LOGIC: Bullet from " << prevPos.x << " " << prevPos.y << " to " << curPos.x << " " << curPos.y;
+
         //ищем длину пути
         switch (bulDirect) {
         case Direction::Up:
