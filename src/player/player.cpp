@@ -3,7 +3,7 @@
 
 using namespace player;
 
-PLAYER::PLAYER(t_player_number id, PositionCoord startPosition, Direction startDirection, player_type pType, bullet_type bType)
+PLAYER::PLAYER(t_player_number id, PositionCoord startPosition, Direction startDirection, player_type pType)
 {
     player_id = id;
     player_pos.x = startPosition.x;
@@ -11,7 +11,6 @@ PLAYER::PLAYER(t_player_number id, PositionCoord startPosition, Direction startD
     player_direction = startDirection;
     hp = tmap::TMap::getPlayerType(pType).default_hp;
     player_type_id = pType;
-    bullet_type_id = bType;
 }
 
 t_player_number PLAYER::getPlayerId()
@@ -41,7 +40,7 @@ player_type PLAYER::getPlayerType()
 
 bullet_type PLAYER::getBulletType()
 {
-    return bullet_type_id;
+    return tmap::TMap::getPlayerType(player_type_id).bullet_type_id;
 }
 
 unsigned int PLAYER::getSize()
@@ -73,59 +72,121 @@ void PLAYER::Move(tmap::TMap* map_)
 {
     qDebug() << "PLAYER: move, id = " << player_id << endl;
     PositionCoord newPosition, checkPosition;
-    Direction d;
+   // Direction d;
     auto size = tmap::TMap::getPlayerType(player_type_id).tank_size;
     int s = (size - 1) / 2;
 
     qDebug() << "PLAYER: tank size = " << size << endl;
 
+    int v=(int)tmap::TMap::getPlayerType(player_type_id).velocity;
+    int real_v = 0;
+
     switch (player_direction)
     {
     case Direction::Left:
         {
-            checkPosition = PositionCoord(player_pos.x - s - 1, player_pos.y);
-            newPosition = PositionCoord(player_pos.x - 1, player_pos.y);
-            d = Direction::Up;
+            Direction d=Direction::Up;
+            for(int i = 1; i <= v; i++)
+            {
+                checkPosition = PositionCoord(player_pos.x - s - i, player_pos.y);
+                if (!map_->isEmptyRow(size, checkPosition, d))
+                {
+                    qDebug() << "PLAYER: new position invalide "<< endl;
+                    real_v = i - 1;
+                    break;
+                }
+                else real_v = v;
+            }
+
+            qDebug() << "PLAYER: new position valide "<< endl;
+            if(real_v!=0)
+            {
+                newPosition = PositionCoord(player_pos.x - real_v, player_pos.y);
+                map_->movePlayer(player_pos, newPosition);
+                player_pos.x = newPosition.x;
+                player_pos.y = newPosition.y;
+            }
             break;
         }
     case Direction::Right:
         {
+            Direction d=Direction::Up;
+            for(int i = 1; i <= v; i++)
+            {
+                checkPosition = PositionCoord(player_pos.x + s + i, player_pos.y);
+                if (!map_->isEmptyRow(size, checkPosition, d))
+                {
+                    qDebug() << "PLAYER: new position invalide "<< endl;
+                    real_v = i - 1;
+                    break;
+                }
+                else real_v = v;
+            }
 
-            checkPosition = PositionCoord(player_pos.x + s + 1, player_pos.y);
-            newPosition = PositionCoord(player_pos.x + 1, player_pos.y);
-            d = Direction::Up;
+            qDebug() << "PLAYER: new position valide "<< endl;
+            if(real_v!=0)
+            {
+                newPosition = PositionCoord(player_pos.x + real_v, player_pos.y);
+                map_->movePlayer(player_pos, newPosition);
+                player_pos.x = newPosition.x;
+                player_pos.y = newPosition.y;
+            }
             break;
         }
     case Direction::Up:
         {
-            checkPosition = PositionCoord(player_pos.x, player_pos.y + s + 1);
-            newPosition = PositionCoord(player_pos.x, player_pos.y + 1);
-            d = Direction::Right;
+            Direction d=Direction::Right;
+            for(int i = 1; i <= v; i++)
+            {
+                checkPosition = PositionCoord(player_pos.x, player_pos.y + s + i);
+                if (!map_->isEmptyRow(size, checkPosition, d))
+                {
+                    qDebug() << "PLAYER: new position invalide "<< endl;
+                    real_v = i - 1;
+                    break;
+                }
+                else real_v = v;
+            }
+
+            qDebug() << "PLAYER: new position valide "<< endl;
+            if(real_v!=0)
+            {
+                newPosition = PositionCoord(player_pos.x, player_pos.y + real_v);
+                map_->movePlayer(player_pos, newPosition);
+                player_pos.x = newPosition.x;
+                player_pos.y = newPosition.y;
+            }
             break;
         }
     case Direction::Down:
         {
-            checkPosition = PositionCoord(player_pos.x, player_pos.y - s - 1);
-            newPosition = PositionCoord(player_pos.x, player_pos.y - 1);
-            d = Direction::Right;
+            Direction d=Direction::Right;
+            for(int i = 1; i <= v; i++)
+            {
+                checkPosition = PositionCoord(player_pos.x, player_pos.y - s - i);
+                if (!map_->isEmptyRow(size, checkPosition, d))
+                {
+                    qDebug() << "PLAYER: new position invalide "<< endl;
+                    real_v = i - 1;
+                    break;
+                }
+                else real_v = v;
+            }
+
+            qDebug() << "PLAYER: new position valide "<< endl;
+            if(real_v!=0)
+            {
+                newPosition = PositionCoord(player_pos.x, player_pos.y - real_v);
+                map_->movePlayer(player_pos, newPosition);
+                player_pos.x = newPosition.x;
+                player_pos.y = newPosition.y;
+            }
             break;
         }
     }
 
     qDebug() << "PLAYER: cur position " << player_pos.x << " " << player_pos.y << endl;
     qDebug() << "PLAYER: new position " << newPosition.x << " " << newPosition.y << endl;
-
-    if (map_->isEmptyRow(size, checkPosition, d))
-    {
-        map_->movePlayer(player_pos, newPosition);
-        qDebug() << "PLAYER: new position valide "<< endl;
-        player_pos.x = newPosition.x;
-        player_pos.y = newPosition.y;
-
-
-    }
-    else
-         qDebug() << "PLAYER: new position invalide "<< endl;
 
     qDebug() << "PLAYER: MOVE end\n";
 
@@ -140,6 +201,7 @@ shared_ptr<BULLET> PLAYER::Attack()
 {
     qDebug() << "PLAYER: Attack started player coords: " << player_pos.x << " " << player_pos.y << endl;
     auto size = tmap::TMap::getPlayerType(player_type_id).tank_size;
+    int bullet_type_id = tmap::TMap::getPlayerType(player_type_id).bullet_type_id;
     PositionCoord start_pos;
     int s = ((int)size - 1) / 2;
 

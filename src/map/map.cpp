@@ -18,6 +18,7 @@ BULLET_TYPE_STRUCT TMap::getBulletType(bullet_type pt) {
 }
 
 void TMap::movePlayer(PositionCoord old_p, PositionCoord new_p) {
+    qDebug("MAP: move player: (%d,%d) -> (%d,%d)", old_p.x, old_p.y, new_p.x, new_p.y);
    auto player = players[old_p.x][old_p.y];
    players[new_p.x][new_p.y] = player;
    players[old_p.x].erase(old_p.y);
@@ -96,16 +97,16 @@ bool TMap::loadSquare(string square) {
 
     PositionCoord pc1((max1.x + min1.x)/2,(max1.y + min1.y)/2);
     auto player1 = shared_ptr<player::PLAYER> (
-                new player::PLAYER(1,pc1,  /*задаются в json*/ Direction(0),0,0)
+                new player::PLAYER(1,pc1,  /*задаются в json*/ Direction(0),0)
                 );
     this->createPlayer(pc1, player1);
     PositionCoord pc2((max2.x + min2.x)/2,(max2.y + min2.y)/2);
     auto player2 = shared_ptr<player::PLAYER> (
-                new player::PLAYER(2,pc2,  /*задаются в json*/ Direction(0),0,0)
+                new player::PLAYER(2,pc2,  /*задаются в json*/ Direction(0),0)
                 );
     this->createPlayer(pc2, player2);
 
-    return false;
+    return true;
 }
 
 bool TMap::loadConfig(string config) {
@@ -155,6 +156,7 @@ bool TMap::loadConfig(string config) {
 
     string square = dmap["square"].GetString();
     if(!this->loadSquare(square)) {
+        qDebug("MAP: loadSquare error");
         return false;
     }
 

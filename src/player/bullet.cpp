@@ -47,26 +47,27 @@ unsigned int BULLET::getVelocity()
 
 void BULLET::Move()
 {
+    int v = getVelocity();
 	switch (bullet_direction)
 	{
 	case Direction::Left:
 	{
-		bullet_pos = PositionCoord(bullet_pos.x - 1, bullet_pos.y);
+        bullet_pos = PositionCoord(bullet_pos.x - v, bullet_pos.y);
 		break;
 	}
 	case Direction::Right:
 	{
-		bullet_pos = PositionCoord(bullet_pos.x + 1, bullet_pos.y);
+        bullet_pos = PositionCoord(bullet_pos.x + v, bullet_pos.y);
 		break;
 	}
 	case Direction::Up:
 	{
-        bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y + 1);
+        bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y + v);
 		break;
 	}
 	case Direction::Down:
 	{
-        bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y - 1);
+        bullet_pos = PositionCoord(bullet_pos.x, bullet_pos.y - v);
 		break;
 	}
 	}

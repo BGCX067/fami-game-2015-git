@@ -19,10 +19,9 @@ namespace player
         Direction player_direction;
         hit_points hp;
         player_type player_type_id;
-        bullet_type bullet_type_id;
 
     public:
-        PLAYER(t_player_number, PositionCoord, Direction, player_type, bullet_type);
+        PLAYER(t_player_number, PositionCoord, Direction, player_type);
 
         t_player_number getPlayerId();
 
