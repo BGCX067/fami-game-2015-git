@@ -18,7 +18,8 @@ TanksGUI::TanksGUI(QWidget *parent) :
     MapModule = make_shared<tmap::TMap>();
     MapModule->loadConfig(DEFAULT_CONFIG_MAP);
     ui->graphicsView->init(MapModule);
-
+    ui->progressBarP1->setStyleSheet("QProgressBar {background-color: #ccc; color: #fff; border-radius: 5px; text-align: middle; } QProgressBar::chunk {color: #fff; background-color: blue; border-radius: 5px;}");
+    ui->progressBarP2->setStyleSheet("QProgressBar {background-color: #ccc; color: #fff; border-radius: 5px; text-align: middle; } QProgressBar::chunk {color: #fff; background-color: red; border-radius: 5px;}");
 
 }
 
@@ -36,6 +37,49 @@ void TanksGUI::resizeEvent(QResizeEvent * resizeEvent)
     printf("%d %d \n", sizeh, sizew);
 }
 
+void TanksGUI::sendCommand(int player_id, GUICommand desc)
+{
+    CommandFromGUI testCommand;
+    testCommand.setPlayerNumber(player_id);
+    testCommand.setFromGUICommand(desc);
+    LogicModule->setNextCommandFromGUI(testCommand);
+}
+
+void TanksGUI::newStatus()
+{
+    LOGICCommand new_status = LogicModule->getStatusForGUI();
+    switch(new_status)
+    {//enum class LOGICCommand {GAME_CONTINUE, GAME_OVER, PLAYER_1_WIN, PLAYER_2_WIN};
+        case LOGICCommand::GAME_CONTINUE:{break;};
+        case LOGICCommand::GAME_OVER:
+        {
+            logic_flag = 0;
+            game_timer->stop();
+            printf("TIMER IS DEAD\n");
+            QMessageBox::about(this, " ", "GAME OVER!");
+            break;
+        };
+        case LOGICCommand::PLAYER_1_WIN:
+        {
+            logic_flag = 0;
+            ui->progressBarP2->setValue(0);
+            game_timer->stop();
+            printf("TIMER IS DEAD\n");
+            QMessageBox::about(this, "CONGRATULATIONS!", "PLAYER 1 WINS!");
+            break;
+        };
+        case LOGICCommand::PLAYER_2_WIN:
+        {
+            logic_flag = 0;
+            ui->progressBarP2->setValue(0);
+            game_timer->stop();
+            printf("TIMER IS DEAD\n");
+            QMessageBox::about(this, "CONGRATULATIONS!", "PLAYER 2 WINS!");
+            break;
+        };
+    }
+}
+
 void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
 {
     qDebug() << "GUI: keyPressEvent. Logic : "<< logic_flag << endl;
@@ -45,124 +89,69 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
         {
             case Qt::Key_W :{
                 //printf("BUTTON_W!!!\n");
-                guicmd.player_id = 1;   guicmd.cmd_code = 1;    guicmd.desc = GUICommand::Up;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
+                sendCommand(1, GUICommand::Up);
                 break;
             };
 
             case Qt::Key_A :{
                 //printf("BUTTON_A!!!\n");
-                guicmd.player_id = 1;   guicmd.cmd_code = 2;    guicmd.desc = GUICommand::Left;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(1, GUICommand::Left);
                 break;
             };
 
             case Qt::Key_S :{
                 //printf("BUTTON_S!!!\n");
-                guicmd.player_id = 1;   guicmd.cmd_code = 3;    guicmd.desc = GUICommand::Down;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(1, GUICommand::Down);
                 break;
             };
 
             case Qt::Key_D :{
                 //printf("BUTTON_D!!!\n");
-                guicmd.player_id = 1;   guicmd.cmd_code = 4;    guicmd.desc = GUICommand::Right;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
+                sendCommand(1, GUICommand::Right);
 
                 break;
             };
 
             case Qt::Key_Space :{
                 //printf("BUTTON_FIRE_IN_THE_HOLE!!!\n");
-                guicmd.player_id = 1;   guicmd.cmd_code = 10;    guicmd.desc = GUICommand::Atack;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(1, GUICommand::Attack);
                 break;
             };
 
             case Qt::Key_Left :{
                 //printf("BUTTON_LEFT!!!\n");
-                guicmd.player_id = 2;   guicmd.cmd_code = 5;    guicmd.desc = GUICommand::Left;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(2, GUICommand::Left);
                 break;
             };
 
             case Qt::Key_Up :{
                 //printf("BUTTON_UP!!!\n");
-                guicmd.player_id = 2;   guicmd.cmd_code = 6;    guicmd.desc = GUICommand::Up;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(2, GUICommand::Up);
                 break;
             };
 
             case Qt::Key_Right :{
                 //printf("BUTTON_RIGHT!!!\n");
-                guicmd.player_id = 2;   guicmd.cmd_code = 7;    guicmd.desc = GUICommand::Right;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(2, GUICommand::Right);
                 break;
             };
 
             case Qt::Key_Down :{
                 //printf("BUTTON_DOWN!!!\n");
-                guicmd.player_id = 2;   guicmd.cmd_code = 8;    guicmd.desc = GUICommand::Down;
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(2, GUICommand::Down);
                 break;
             };
 
             case Qt::Key_I :{
                 //printf("FIRE_IN_THE_HOLE!!!\n");
-                guicmd.player_id = 2;   guicmd.cmd_code = 9;    guicmd.desc = GUICommand::Atack;
-
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(2, GUICommand::Attack);
                 break;
             };
 
             case Qt::Key_Escape :
             {
                 //printf("NEED A BRAKE, CAP!!!\n");
-                guicmd.player_id = 0;   guicmd.cmd_code = 13;    guicmd.desc = GUICommand::PAUSE;
-
-                CommandFromGUI testCommand;
-                testCommand.setPlayerNumber(guicmd.player_id);
-                testCommand.setFromGUICommand(guicmd.desc);
-                LogicModule->setNextCommandFromGUI(testCommand);
-
+                sendCommand(0, GUICommand::PAUSE);
                 break;
             }
             update();
@@ -175,8 +164,6 @@ void TanksGUI::keyPressEvent(QKeyEvent * keyEvent)
 void TanksGUI::on_pushButton_clicked()
 {
    // printf("BUTTON_START!!!\n");
-    guicmd.player_id = 0;   guicmd.cmd_code = 10;    guicmd.desc = GUICommand::START;
-
     if(logic_flag == 0)
     {
         //Запуск таймера
@@ -195,10 +182,7 @@ void TanksGUI::on_pushButton_clicked()
     }
     else
     {
-        CommandFromGUI testCommand;
-        testCommand.setPlayerNumber(guicmd.player_id);
-        testCommand.setFromGUICommand(guicmd.desc);
-        LogicModule->setNextCommandFromGUI(testCommand);
+        sendCommand(0, GUICommand::START);
     }
     setFocus();
 }
@@ -209,12 +193,7 @@ void TanksGUI::on_pushButton_2_clicked()
     if(logic_flag == 1)
     {
         printf("BUTTON_STOP!!!\n");
-        guicmd.player_id = 0;   guicmd.cmd_code = 11;    guicmd.desc = GUICommand::STOP;
-
-        CommandFromGUI testCommand;
-        testCommand.setPlayerNumber(guicmd.player_id);
-        testCommand.setFromGUICommand(guicmd.desc);
-        LogicModule->setNextCommandFromGUI(testCommand);
+        sendCommand(0, GUICommand::STOP);
         logic_flag = 0;
         game_timer->stop();
         printf("TIMER IS DEAD\n");
@@ -225,16 +204,10 @@ void TanksGUI::on_pushButton_2_clicked()
 void TanksGUI::on_pushButton_3_clicked()
 {
     //printf("BUTTON_ABOUT!!!\n");
-    //guicmd.player_id = 0;   guicmd.cmd_code = 12;    guicmd.desc = GUICommand::ABOUT;
-    //CommandFromGUI testCommand;
-    //testCommand.setPlayerNumber(guicmd.player_id);
-    //testCommand.setFromGUICommand(guicmd.desc);
-    //LogicModule->setNextCommandFromGUI(testCommand);
-
     QMessageBox::about(this, "About", "Game was created by PMM-41/42 under M. Royak guidance! Thank you!");
 }
 
-void TanksGUI::on_actionDownload_Map_triggered()
+void TanksGUI::on_actionLoad_Map_triggered()
 {
    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*)"));
    //Отправить событие Карте!
@@ -243,9 +216,33 @@ void TanksGUI::on_actionDownload_Map_triggered()
    this->MapModule->loadConfig(fileName.toStdString());
 }
 
+void TanksGUI::setHPBarValue(int player_id, QProgressBar *bar)
+{
+    auto player = MapModule->getPlayer(player_id);
+    int hp = player->getCurrentHitPoints();
+    auto player_type = player->getPlayerType();
+    auto max_hp = MapModule->getPlayerType(player_type).default_hp;
+
+    double percent;
+    if (hp < max_hp)
+        percent = hp * 100 / max_hp;
+    else
+        percent = 100;
+    bar->setValue(percent);
+}
+
+
 // Обработка событий по основному игровому таймеру
-void TanksGUI::timer_event() {
+void TanksGUI::timer_event()
+{
    // qDebug() << "Timer event";
-    LogicModule->run();
+    LogicModule->run();    
     ui->graphicsView->render();
+    newStatus();
+    if(logic_flag != 0)
+    {
+        setHPBarValue(1, ui->progressBarP1);
+        setHPBarValue(2, ui->progressBarP2);
+    }
+
 }

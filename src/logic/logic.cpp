@@ -200,7 +200,7 @@ void Logic::run()
         case GUICommand::Right:
             GUICommandMove(Direction::Right);
             break;
-        case GUICommand::Atack:
+        case GUICommand::Attack:
             qDebug() << "LOGIC: Attack command\n";
             _currentMap->forEachPlayer([&](PositionCoord, shared_ptr<player::PLAYER> pPlayer)->void {
                 if(pPlayer->getPlayerId() == playerNumber) {

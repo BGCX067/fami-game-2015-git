@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsView>
 #include <QTimer>
+#include <QProgressBar>
 #include <string>
 
 #include "gui/interface.h"
@@ -12,7 +13,7 @@
 
 using namespace std;
 
-struct gui_cmd
+/*struct gui_cmd
 {
     gui_cmd()
     {
@@ -24,7 +25,7 @@ struct gui_cmd
     int player_id; // номер команды
     int cmd_code; // код команды
     GUICommand desc; // описание команды
-};
+};*/
 
 namespace Ui {
 class TanksGUI;
@@ -42,21 +43,21 @@ private:
     shared_ptr<logic::Logic> LogicModule; //теперь здесь живет экземплр логики
     shared_ptr<tmap::TMap> MapModule;
     Ui::TanksGUI *ui;
-    gui_cmd guicmd;
+//    gui_cmd guicmd;
     QTimer* game_timer;
     bool logic_flag;
-
-
+    void sendCommand(int player_id, GUICommand desc);
+    void newStatus();
+    void setHPBarValue(int player_id, QProgressBar *bar);
     private slots:
           // Слот для обработки нажатий всех кнопок
           void keyPressEvent(QKeyEvent *keyEvent);
           void on_pushButton_clicked();
           void on_pushButton_2_clicked();
           void on_pushButton_3_clicked();
-		  void on_actionDownload_Map_triggered();
+          void on_actionLoad_Map_triggered();
           void resizeEvent(QResizeEvent *resizeEvent);
-          void timer_event();
-
+          void timer_event();          
 };
 
 #endif // TANKSGUI_H
