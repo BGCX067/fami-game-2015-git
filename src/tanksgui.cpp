@@ -207,15 +207,6 @@ void TanksGUI::on_pushButton_3_clicked()
     QMessageBox::about(this, "About", "Game was created by PMM-41/42 under M. Royak guidance! Thank you!");
 }
 
-void TanksGUI::on_actionLoad_Map_triggered()
-{
-   QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*)"));
-   //Отправить событие Карте!
-   //printf("CANT TOUCH THIS!!!\n");
-
-   this->MapModule->loadConfig(fileName.toStdString());
-}
-
 void TanksGUI::setHPBarValue(int player_id, QProgressBar *bar)
 {
     auto player = MapModule->getPlayer(player_id);
@@ -236,7 +227,7 @@ void TanksGUI::setHPBarValue(int player_id, QProgressBar *bar)
 void TanksGUI::timer_event()
 {
    // qDebug() << "Timer event";
-    LogicModule->run();    
+    LogicModule->run();
     ui->graphicsView->render();
     newStatus();
     if(logic_flag != 0)
@@ -245,4 +236,13 @@ void TanksGUI::timer_event()
         setHPBarValue(2, ui->progressBarP2);
     }
 
+}
+
+void TanksGUI::on_actionDownload_Map_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Files (*)"));
+    //Отправить событие Карте!
+    //printf("CANT TOUCH THIS!!!\n");
+
+    this->MapModule->loadConfig(fileName.toStdString());
 }
