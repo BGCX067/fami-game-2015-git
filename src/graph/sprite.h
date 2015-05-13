@@ -8,10 +8,10 @@ class sprite
 friend class graphicsManager;
 public:
     sprite();
-    sprite(const char *filename);
+    sprite(const char *filename, const char *spritename);
     ~sprite();
 
-    bool load(const char *filename);
+    bool load(const char *filename, const char *spritename);
 
     GLuint getTexture();
     GLuint getHeight();

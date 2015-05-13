@@ -10,33 +10,74 @@ graphicManager::~graphicManager()
 
 }
 
+float graphicManager::getAngle(Direction dir)
+{
+    switch(dir)
+    {
+    case Direction::Right:
+        return 90.;
+        break;
+    case Direction::Left:
+        return 270.;
+        break;
+    case Direction::Up:
+        return 0.;
+        break;
+    case Direction::Down:
+        return 180.;
+        break;
+    default:
+        return 0.;
+        break;
+    }
+}
+
 void graphicManager::drawWall(PositionCoord pc, std::shared_ptr<Wall> w)
 {
+    sprite *spt;
     if(w->getType() == 0)
-        drawRect(pc.x*10, pc.y*10, 10.0, 10.0, 0.0, 1.0, 0.0, 1.0);
+        spt = walls.getspriteByNumber(0);
+        //drawRect(pc.x*10, pc.y*10, 10.0, 10.0, 0.0, 1.0, 0.0, 1.0);
     else
-        drawRect(pc.x*10, pc.y*10, 10.0, 10.0, 1.0, 0.5, 0.0, 1.0);
+        spt = walls.getspriteByNumber(3);
+        //drawRect(pc.x*10, pc.y*10, 10.0, 10.0, 1.0, 0.5, 0.0, 1.0);
+
+    drawSprite(spt, pc.x*16, pc.y*16, 1, 0);
 }
 
 void graphicManager::drawTank(PositionCoord pc, std::shared_ptr<player::PLAYER> p)
 {
+    sprite *spt;
     switch(p->getPlayerId()) {
-    case 1: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.0, 0.0, 0.9, 1.0); break;
-    case 2: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.9, 0.0, 0.0, 1.0); break;
-    default: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.5, 0.5, 0.5, 1.0); break;
+    case 1:
+        spt = tanks.getspriteByNumber(0);
+        break;
+    case 2:
+        spt = tanks.getspriteByNumber(1);
+        break;
+    //case 1: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.0, 0.0, 0.9, 1.0); break;
+    //case 2: drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.9, 0.0, 0.0, 1.0); break;
+    default:
+        spt = tanks.getspriteByNumber(0);
+        break;//drawRect(pc.x*10, pc.y*10, 30.0, 30.0, 0.5, 0.5, 0.5, 1.0); break;
     }
+
+    drawSprite(spt, pc.x*16, pc.y*16, 3, getAngle(p.get()->getCurrentDirection()));
 }
 
 void graphicManager::drawBullet(PositionCoord pc, std::shared_ptr<player::BULLET> b)
 {
-    (void)b;
-    drawRect(pc.x*10, pc.y*10, 5.0, 5.0, 0.5, 0.5, 0.5, 1.0);
+    //(void)b;
+    //todo: change for bullet-drawing code;
+    //drawRect(pc.x*10, pc.y*10, 5.0, 5.0, 0.5, 0.5, 0.5, 1.0);
+    sprite *spt = bullets.getspriteByNumber(0);
+
+    drawSprite(spt, pc.x*16, pc.y*16, 1, getAngle(b.get()->getDirection()));
 }
 
 void graphicManager::init(shared_ptr<tmap::TMap> mapObject)
 {
     _map = mapObject;
-    initializeGL();
 }
 
 void graphicManager::render()
@@ -54,10 +95,27 @@ void graphicManager::clear()
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void graphicManager::loadSprites()
+{
+    //robust indian-style code for sprite loading :D
+    tanks.regSprite(new sprite("../sprites/tank1.png", "tank1"));
+    tanks.regSprite(new sprite("../sprites/tank2.png", "tank2"));
+
+    walls.regSprite(new sprite("../sprites/wall1.png", "wall1_unbroken"));
+    walls.regSprite(new sprite("../sprites/wall2.png", "wall1_broken"));
+    walls.regSprite(new sprite("../sprites/wall3.png", "wall1_destroyed"));
+
+    walls.regSprite(new sprite("../sprites/swall1.png", "wall2_unbroken"));
+    walls.regSprite(new sprite("../sprites/swall2.png", "wall1_broken"));
+    walls.regSprite(new sprite("../sprites/swall3.png", "wall1_destroyed"));
+
+    bullets.regSprite(new sprite("../sprites/bullet.png", "bullet1"));
+}
+
 void graphicManager::initializeGL()
 {
-    qDebug() << this->height() << " " <<  this->width();
     initGL(this->height() , this->width());
+    loadSprites();
 }
 
 void graphicManager::resizeGL(int w, int h)
@@ -65,8 +123,10 @@ void graphicManager::resizeGL(int w, int h)
     glViewport( 0, 0, ( GLsizei )w, ( GLsizei )h );
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    //glScalef(1,1,1); //todo: use scaling to make scene fit into the screen;
+    calculateAreaScaleFactor(_map.get()->getSizeX(), _map.get()->getSizeY());
     glOrtho(0.0, w, h, 0.0, 0.0f, 1.0f);
+    glScalef(viewportScaleFactor, viewportScaleFactor, 0);
+    //glTranslatef(1*viewportScaleFactor, 1*viewportScaleFactor, 0);
 }
 
 void graphicManager::drawLine(GLfloat xSt, GLfloat ySt, GLfloat xEd, GLfloat yEd, GLfloat r, GLfloat g, GLfloat b, GLfloat a)
@@ -239,8 +299,8 @@ void graphicManager::calculateAreaScaleFactor(float xSize, float ySize)
 {
     int aWidth = this->width(),
         aHeight = this->height();
-    float scaleX = aWidth / xSize,
-          scaleY = aHeight / ySize;
+    float scaleX = aWidth / (xSize*16),
+          scaleY = aHeight / (ySize*16);
 
     viewportScaleFactor = (scaleX < scaleY) ? scaleX : scaleY ;
 }
@@ -260,7 +320,7 @@ void graphicManager::initGL(unsigned int h, unsigned int w)
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
 
-    glEnable(GL_BLEND);
+    glDisable(GL_BLEND);
     glEnable(GL_TEXTURE_2D);
 
     glShadeModel( GL_SMOOTH );

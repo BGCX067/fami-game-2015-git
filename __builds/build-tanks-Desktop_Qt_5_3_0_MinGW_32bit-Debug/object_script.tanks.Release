@@ -1,0 +1,14 @@
+INPUT(
+./release/main.o
+./release/tanksgui.o
+./release/general_types.o
+./release/logic.o
+./release/map.o
+./release/player.o
+./release/bullet.o
+./release/graphicmanager.o
+./release/renderGL.o
+./release/sprite.o
+./release/spritemanager.o
+./release/moc_tanksgui.o
+);

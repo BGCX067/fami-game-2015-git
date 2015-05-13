@@ -8,9 +8,9 @@ sprite::sprite()
     name = "";
 }
 
-sprite::sprite(const char *filename)
+sprite::sprite(const char *filename, const char *spritename)
 {
-    load(filename);
+    load(filename, spritename);
 }
 
 sprite::~sprite()
@@ -18,20 +18,20 @@ sprite::~sprite()
     kill();
 }
 
-bool sprite::load(const char *filename)
+bool sprite::load(const char *filename, const char *spritename)
 {
     QImage *surf = new QImage(filename);
 
     if(surf->isNull())
     {
-        std::cout << "Failed loading texture" << std::endl;
+        qDebug() << "Failed loading texture from " << filename;
         return false;
     }
 
     height = surf->height();
     width = surf->width();
 
-    name = filename;
+    name = spritename;
 
     glGenTextures(1, &texture); //gen tex id
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -45,7 +45,7 @@ bool sprite::load(const char *filename)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); //Beauty grafon
 
     if(surf->hasAlphaChannel())
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_RGBA, surf->convertToFormat(QImage::Format_RGB888).bits());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, surf->convertToFormat(QImage::Format_RGBA8888).bits());
     else
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, surf->convertToFormat(QImage::Format_RGB888).bits());
 

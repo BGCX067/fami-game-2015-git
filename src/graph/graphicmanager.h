@@ -4,6 +4,7 @@
 #include "graphinclude.h"
 #include "sprite.h"
 #include "interface.h"
+#include "spritemanager.h"
 #include "../map/interface.h"
 #include "../player/interface.h"
 #include <QGLWidget>
@@ -41,12 +42,15 @@ protected:
 
     void clear();
 
+    void loadSprites();
+
 private:
     //Draw inits
     void initDraw(GLuint spr); //Inits texture;
     void setMatrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, float rotation); //For now it sets modelview matrix
 
     void calculateAreaScaleFactor(float xSize, float ySize);
+    float getAngle(Direction dir);
 
     //GL micro
     void initGL(unsigned int h, unsigned int w);
@@ -55,6 +59,8 @@ private:
     float viewportScaleFactor = 1;
     GLuint currentSprite;
     shared_ptr<tmap::TMap> _map;
+
+    spriteManager tanks, walls, bullets;
 };
 
 #endif // GRAPHICMANAGER_H

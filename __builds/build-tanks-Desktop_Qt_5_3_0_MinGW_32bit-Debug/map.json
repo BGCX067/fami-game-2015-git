@@ -1,0 +1,32 @@
+{
+    "map": {
+        "square": "../conf/square.tmap",
+        "players": [{
+            "dir": 1,
+            "type": 0
+        }, {
+            "dir": 3,
+            "type": 1
+        }],
+        "player_types": [{
+            "tank_size": 3,
+            "velocity": 1,
+            "default_hp": 20,
+            "bullet_type": 0
+        }, {
+            "tank_size": 3,
+            "velocity": 2,
+            "default_hp": 15,
+            "bullet_type": 1
+        }],
+        "bullet_types": [{
+            "damage": 5,
+            "damage_size": 3,
+            "velocity": 1
+        }, {
+            "damage": 3,
+            "damage_size": 3,
+            "velocity": 2
+        }]
+    }
+}

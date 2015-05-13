@@ -1,0 +1,14 @@
+INPUT(
+./debug/main.o
+./debug/tanksgui.o
+./debug/general_types.o
+./debug/logic.o
+./debug/map.o
+./debug/player.o
+./debug/bullet.o
+./debug/graphicmanager.o
+./debug/renderGL.o
+./debug/sprite.o
+./debug/spritemanager.o
+./debug/moc_tanksgui.o
+);
