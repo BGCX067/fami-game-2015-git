@@ -47,7 +47,7 @@ protected:
 private:
     //Draw inits
     void initDraw(GLuint spr); //Inits texture;
-    void setMatrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, float rotation); //For now it sets modelview matrix
+    void setMatrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, float scaleFactor, float rotation); //For now it sets modelview matrix
 
     void calculateAreaScaleFactor(float xSize, float ySize);
     float getAngle(Direction dir);

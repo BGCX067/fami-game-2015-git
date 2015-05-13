@@ -245,20 +245,20 @@ void graphicManager::drawSprite(sprite *sp, GLfloat x, GLfloat y, GLfloat scale,
 
     //inits
     initDraw(sp->getTexture());
-    setMatrix(x-width/2, y-height/2, width, height, rotation);
+    setMatrix(x-width*scale/2, y-height*scale/2, width*scale, height*scale, scale, rotation);
 
     glBegin(GL_QUADS);
 
         glColor4f(1.0, 1.0, 1.0, 1.0);
 
         glTexCoord2f (0., 1.);
-        glVertex2f (0, height*scale);
+        glVertex2f (0, height);
 
         glTexCoord2f (1., 1.);
-        glVertex2f (width*scale, height*scale);
+        glVertex2f (width, height);
 
         glTexCoord2f (1., 0.);
-        glVertex2f (width*scale, 0);
+        glVertex2f (width, 0);
 
         glTexCoord2f (0., 0.);
         glVertex2f (0, 0);
@@ -275,7 +275,7 @@ void graphicManager::drawSprite(sprite *sp, GLfloat x, GLfloat y, GLfloat scale,
 
 }
 
-void graphicManager::setMatrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, float rotation)
+void graphicManager::setMatrix(GLfloat x, GLfloat y, GLfloat width, GLfloat height, float scaleFactor, float rotation)
 {
 
     glMatrixMode(GL_MODELVIEW);
@@ -292,7 +292,7 @@ void graphicManager::setMatrix(GLfloat x, GLfloat y, GLfloat width, GLfloat heig
         glTranslatef(-Xc, -Yc, 0.0f);
     }
 
-    //glScalef(scaleFactor, scaleFactor, 0);
+    glScalef(scaleFactor, scaleFactor, 0);
 }
 
 void graphicManager::calculateAreaScaleFactor(float xSize, float ySize)
