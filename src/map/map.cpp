@@ -171,6 +171,7 @@ bool TMap::loadConfig(string config) {
             if(p->getPlayerId() == i + 1) {
                 p->setCurrentDirection(Direction(dir));
                 p->setPlayerType(type);
+                p->setCurrentHitPoints(getPlayerType(type).default_hp);
             }
         });
     }

@@ -53,6 +53,10 @@ unsigned int PLAYER::getVelocity()
     return tmap::TMap::getPlayerType(player_type_id).velocity;
 }
 
+void PLAYER::setCurrentHitPoints (hit_points hp) {
+    this->hp = hp;
+}
+
 bool PLAYER::RecieveDamage(hit_points damage)
 {
     hp -= damage;

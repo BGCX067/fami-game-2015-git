@@ -43,6 +43,8 @@ namespace player
 
         void setCurrentDirection(Direction);
 
+        void setCurrentHitPoints (hit_points);
+
         bool RecieveDamage(hit_points);
 
         void Move(tmap::TMap*);
