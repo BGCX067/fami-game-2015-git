@@ -27,7 +27,7 @@ void Logic::setNextCommandFromGUI(CommandFromGUI g_commandFromGUI)
 
 void Logic::run()
 {
-    if(!_logicRun.try_lock())
+    if(!_logicRun.tryLock())
         return;
     // Просчет разрушений с прошлого шага
     _currentMap->forEachBullet([&](PositionCoord pc, shared_ptr<player::BULLET> bul)->void
@@ -100,7 +100,7 @@ void Logic::run()
                     {
                         // Хана стенке
                         _currentMap->deleteWall(intermediatePos);
-                        // И, возможно, окресностям
+                        // И, возможно, окрестностям
                         // Дополнительный урон стенке
                         PositionCoord add1(intermediatePos), add2(intermediatePos);
                         if(bulDirect == Direction::Left || bulDirect == Direction::Right)
