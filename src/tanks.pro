@@ -6,11 +6,17 @@
 
 QT       += core gui opengl
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+    CONFIG += C++11
+} else {
+    DEFINES += HAVE_QT4
+    *g++*|*clang* {
+        QMAKE_CXXFLAGS += -std=c++11
+    }
+}
 
 TARGET = tanks
-
-CONFIG += C++11
 
 TEMPLATE = app
 
