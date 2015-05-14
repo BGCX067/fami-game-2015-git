@@ -255,9 +255,12 @@ void TMap::forEachPlayer(function<void(PositionCoord, shared_ptr<player::PLAYER>
 
 void TMap::forEachBullet(function<void(PositionCoord, shared_ptr<player::BULLET>) > f) {
     for (auto& xi : bullets)
-    for (auto&yi : xi.second) {
-        f(PositionCoord(xi.first, yi.first), yi.second);
-    }
+        for(size_t i = 0; i < xi.second.size(); i++) {
+            auto yi = xi.second.begin();
+            for(size_t j = 0; j < i; j++) yi++;
+            qDebug() << "MAP: forEachBullet coords " << xi.first << " " << yi->first << endl;
+            f(PositionCoord(xi.first, yi->first), yi->second);
+        }
 }
 
 bool TMap::createWall(PositionCoord coord, shared_ptr<Wall> w) {
@@ -341,11 +344,13 @@ bool TMap::deletePlayer(PositionCoord coord) {
 }
 
 bool TMap::deleteBullet(PositionCoord coord) {
+    qDebug() << "MAP: deleteBullet map coord " << coord.x << " " << coord.y << endl;
     const auto& bulletsX = bullets.find(coord.x);
     if (bulletsX == bullets.end())return true;
     auto& bulletsY = bulletsX->second;
     if (bulletsY.find(coord.y) != bulletsY.end()) {
         bulletsY.erase(coord.y);
+        qDebug() << "MAP: deleted" << endl;
         return true;
     }
     return false;
