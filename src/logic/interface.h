@@ -3,7 +3,7 @@
 
 #include <string>
 #include <queue>
-#include <mutex>
+#include <QMutex>
 #include "../map/interface.h"
 
 using namespace std;
@@ -27,7 +27,7 @@ private:
     queue<CommandFromGUI> _commandsFromGUI;                         // Очередь gui комманд
     shared_ptr<tmap::TMap> _currentMap;                             // Ссылка на глобальную карту
 
-    mutex _logicRun;
+    QMutex _logicRun;
 };
 
 }
