@@ -112,6 +112,8 @@ bool TMap::loadSquare(string square) {
 bool TMap::loadConfig(string config) {
     using namespace rapidjson;
 
+    this->clean();
+
     printf("Start load Map from file %s\n", config.c_str());
 
     FILE* fp;

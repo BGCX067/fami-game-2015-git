@@ -71,7 +71,7 @@ void TanksGUI::newStatus()
         case LOGICCommand::PLAYER_2_WIN:
         {
             logic_flag = 0;
-            ui->progressBarP2->setValue(0);
+            ui->progressBarP1->setValue(0);
             game_timer->stop();
             printf("TIMER IS DEAD\n");
             QMessageBox::about(this, "CONGRATULATIONS!", "PLAYER 2 WINS!");
