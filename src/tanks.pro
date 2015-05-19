@@ -6,11 +6,17 @@
 
 QT       += core gui opengl
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4) {
+    QT += widgets
+    CONFIG += C++11
+} else {
+    DEFINES += HAVE_QT4
+    *g++*|*clang* {
+        QMAKE_CXXFLAGS += -std=c++11
+    }
+}
 
 TARGET = tanks
-
-CONFIG += C++11
 
 TEMPLATE = app
 
@@ -19,16 +25,30 @@ SOURCES += main.cpp\
         tanksgui.cpp \
     general_types.cpp \
     logic/logic.cpp \
+    map/map.cpp \
     player/player.cpp \
-    player/bullet.cpp
+    player/bullet.cpp \
+    graph/graphicmanager.cpp \
+    graph/renderGL.cpp \
+    graph/sprite.cpp \
+    graph/spritemanager.cpp
 
 HEADERS  += tanksgui.h \
     graph/interface.h \
-    gui/interface.h \
     logic/interface.h \
     map/interface.h \
     player/interface.h \
     general_types.h \
-    interface.h
+    graph/graphicmanager.h \
+    graph/sprite.h \
+    graph/spritemanager.h \
+    graph/graphinclude.h
+
+INCLUDEPATH += ../libs
 
 FORMS    += tanksgui.ui
+
+DISTFILES += \
+    graph/ReadMe.txt \
+    ../conf/map.json \
+    ../conf/square.tmap

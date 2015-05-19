@@ -1,63 +1,70 @@
 #pragma once
 #include <functional>
 #include <map>
-#include "../interface.h"
+#include <string>
+#include "../general_types.h"
+#include "../player/interface.h"
 #include <memory>
+
+using namespace std;
+
+namespace player {
+    class PLAYER;
+    class BULLET;
+}
+
 /*
 Интерфейсы взаимодействия с системой игровой карты (MAP).
 */
 
-namespace _map {
-	class MAP
-	{
-	public:
-		virtual bool IsEmpty(PositionCoord coord) = 0;
-		virtual bool IsEmptyRow(int, PositionCoord, Direction) = 0; //Necessary for tank moving!!!
-		virtual void EnumerateWallObjects(std::function<void(PositionCoord, std::shared_ptr<class WallOblect>)> fun) = 0;
-		virtual void EnumeratePlayerObjects(std::function<void(PositionCoord, std::shared_ptr<class Player>)> fun) = 0;
-		virtual void EnumerateBulletObjects(std::function<void(PositionCoord, std::shared_ptr<class Bullet>)> fun) = 0;
-	};
-	
-	class MapExample:public MAP
-	{
-		int sizex, sizey;
-		std::map<int, std::map<int, std::shared_ptr<class WallOblect> > > Wall;
-		std::map<int, std::map<int, std::shared_ptr<class Player> > > Players;
-		std::map<int, std::map<int, std::shared_ptr<class Bullet> > > Bullets;
+namespace tmap {
+    class TMap {
+        int sizex, sizey;
+        map<int, map<int, shared_ptr<Wall>>> walls;
+        map<int, map<int, shared_ptr<player::PLAYER>>> players;
+        map<int, map<int, shared_ptr<player::BULLET>>> bullets;
 
-	public:
+        map<int, shared_ptr<player::PLAYER>> playersById;
 
-		virtual bool IsEmpty(PositionCoord coord)
-		{
-			auto finded = Wall.find(coord.x);
-			if (finded == Wall.end())return true;
-			auto findedy = finded->second.find(coord.y);
-			if (findedy == finded->second.end())return true;
-			return false;		
-		}
+        static map<player_type, PLAYER_TYPE_STRUCT> player_types_database;
+        static map<bullet_type, BULLET_TYPE_STRUCT> bullet_types_database;
 
-		//Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
-		virtual bool IsEmptyRow(int n, PositionCoord coord, Direction a)
-		{
-			return false;
-		}
+    public:
 
+        static PLAYER_TYPE_STRUCT getPlayerType(player_type pt);
+        static BULLET_TYPE_STRUCT getBulletType(bullet_type bt);
 
-		virtual void EnumerateWallObjects(std::function<void(PositionCoord, std::shared_ptr<class WallOblect>) > fun)
-		{
-			for (auto& xi : Wall)
-				for (auto&yi : xi.second)fun(PositionCoord(xi.first, yi.first), yi.second);
-		}
+        bool init(int level);
+        bool clean();
 
-		virtual void EnumeratePlayerObjects(std::function<void(PositionCoord, std::shared_ptr<class Player>) > fun)
-		{
-			throw std::logic_error("The method or operation is not implemented.");
-		}
+        int getSizeX();
+        int getSizeY();
 
-		virtual void EnumerateBulletObjects(std::function<void(PositionCoord, std::shared_ptr<class Bullet>) > fun)
-		{
-			throw std::logic_error("The method or operation is not implemented.");
-		}
+        bool loadSquare(string square);
+        bool loadConfig(string config);
 
-	};
+        bool isEmpty(PositionCoord coord);
+        //Необходимо проверить ряд из n квадратиков с центром в coord по направлению a и -a
+        bool isEmptyRow(int n, PositionCoord coord, Direction a);
+
+        void forEachWall(function<void(PositionCoord, shared_ptr<Wall>) > f);
+        void forEachPlayer(function<void(PositionCoord, shared_ptr<player::PLAYER>)> f);
+        void forEachBullet(function<void(PositionCoord, shared_ptr<player::BULLET>)> f);
+
+        bool createWall(PositionCoord, shared_ptr<Wall>);
+        bool createPlayer(PositionCoord, shared_ptr<player::PLAYER>);
+        bool createBullet(PositionCoord, shared_ptr<player::BULLET>);
+
+        void movePlayer(PositionCoord, PositionCoord);
+
+        shared_ptr<Wall> getWall(PositionCoord);
+        shared_ptr<player::PLAYER> getPlayer(PositionCoord);
+        shared_ptr<player::BULLET> getBullet(PositionCoord);
+
+        shared_ptr<player::PLAYER> getPlayer(t_player_number player_id);
+
+        bool deleteWall(PositionCoord);
+        bool deletePlayer(PositionCoord);
+        bool deleteBullet(PositionCoord);
+    };
 };

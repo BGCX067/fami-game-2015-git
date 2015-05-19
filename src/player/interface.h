@@ -1,73 +1,86 @@
 #pragma once
 
-#include "../interface.h"
 #include <memory>
+#include "../general_types.h"
+#include "../map/interface.h"
 using namespace std;
-namespace _map{ class MAP; };
 
 /*
 Интерфейсы взаимодействия с системой управления игроком (PLAYER).
 */
+namespace tmap { class TMap; }
 
 namespace player
 {
-	class PLAYER
-	{
-		t_player_number player_id;
-		PositionCoord player_pos;
-		Direction player_direction;
-		hit_points hp;
-		hit_points damage;
-		unsigned int size;
+    class PLAYER
+    {
+        t_player_number player_id;
+        PositionCoord player_pos;
+        Direction player_direction;
+        hit_points hp;
+        player_type player_type_id;
 
-	public:
-		PLAYER(t_player_number, PositionCoord, Direction, hit_points, hit_points, unsigned int);
+    public:
+        PLAYER(t_player_number, PositionCoord, Direction, player_type);
 
-		t_player_number getPlayerId();
+        t_player_number getPlayerId();
 
-		PositionCoord getCurrentPosition();
+        PositionCoord getCurrentPosition();
 
-		Direction getCurrentDirection();
-	
-		hit_points getCurrentHitPoints();
+        Direction getCurrentDirection();
 
-		unsigned int getSize();
+        hit_points getCurrentHitPoints();
 
-		//Танк получает урон. 0 - hp еще осталось, 1 - нет     (вместо проверки hp на равенство 0)
-		bool RecieveDamage(hit_points);
+        player_type getPlayerType();
 
-		void Move(_map::MAP*);
+        bullet_type getBulletType();
 
-		void Turn(Direction);
+        unsigned int getSize();
 
-		shared_ptr<class BULLET> Attack();
-	};
+        unsigned int getVelocity();
+
+        void setPlayerType(player_type);
+
+        void setCurrentDirection(Direction);
+
+        void setCurrentHitPoints (hit_points);
+
+        bool RecieveDamage(hit_points);
+
+        void Move(tmap::TMap*);
+
+        void Turn(Direction);
+
+        shared_ptr<class BULLET> Attack();
+    };
 
 
-	class BULLET
-	{
-		t_player_number player_id;
-		PositionCoord bullet_pos;
-		Direction bullet_direction;
-		hit_points damage;	
-		unsigned int dmgsize;	//Пуля будет уничтожать ряд квадратиков, перпендикулярно направлению движения
-		double velocity;
+    class BULLET
+    {
+        t_player_number player_id;
+        bullet_type bullet_type_id;
+        PositionCoord bullet_pos;
+        Direction bullet_direction;
 
-	public:
-		BULLET(t_player_number, PositionCoord, Direction, hit_points, unsigned int, double);
+    public:
+        BULLET(t_player_number, bullet_type, PositionCoord, Direction);
 
-		t_player_number getPlayerId();
+        bullet_type getBulletType();
 
-		PositionCoord getCurrentPosition();
+        t_player_number getPlayerId();
 
-		hit_points getDamage();
+        PositionCoord getCurrentPosition();
 
-		unsigned int getDmgSize();
+        Direction getDirection();
 
-		double getVelocity();
+        hit_points getDamage();
 
-		void Move();
+        unsigned int getDmgSize();
 
-		~BULLET(){};
-	};
+        unsigned int getVelocity();
+
+        void Move();
+
+        ~BULLET(){};
+    };
 };

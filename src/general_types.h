@@ -1,27 +1,45 @@
 #pragma once
 
+#define DEFAULT_CONFIG_MAP "../conf/map.json"
+
 /*
-Описание типов, общих для нескольких подсистем
+РћРїРёСЃР°РЅРёРµ С‚РёРїРѕРІ, РѕР±С‰РёС… РґР»СЏ РЅРµСЃРєРѕР»СЊРєРёС… РїРѕРґСЃРёСЃС‚РµРј
 */
 
+#include <map>
 
-/*Номер игрока*/
+/*РќРѕРјРµСЂ РёРіСЂРѕРєР°*/
 typedef unsigned int t_player_number;
+typedef unsigned int player_type;
+typedef unsigned int bullet_type;
 
-/*Очки жизни игрока*/
- typedef int hit_points;
+/*РћС‡РєРё Р¶РёР·РЅРё РёРіСЂРѕРєР°*/
+typedef int hit_points;
 
-/* Положение на карте */
+struct PLAYER_TYPE_STRUCT {
+    unsigned int tank_size;
+    hit_points default_hp;
+    unsigned int velocity;
+    bullet_type bullet_type_id;
+};
+
+struct BULLET_TYPE_STRUCT {
+    hit_points damage;
+    unsigned int damage_size;
+    unsigned int velocity;
+};
+
+/* РџРѕР»РѕР¶РµРЅРёРµ РЅР° РєР°СЂС‚Рµ */
 struct PositionCoord {
-	int x;
-	int y;
+    int x;
+    int y;
 
-	//Конструктор
-  PositionCoord(){};
-  PositionCoord(int X, int Y) {
-		x = X;
-		y = Y;
-	}
+    //РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
+    PositionCoord() {};
+    PositionCoord(int X, int Y) {
+        x = X;
+        y = Y;
+    }
 
     PositionCoord(const PositionCoord & f) {
         x = f.x;
@@ -42,82 +60,34 @@ struct PositionCoord {
     }
 };
 
-/*Направление движения/стельбы*/
+/*РќР°РїСЂР°РІР»РµРЅРёРµ РґРІРёР¶РµРЅРёСЏ/СЃС‚РµР»СЊР±С‹*/
 enum class Direction {Left, Right, Up, Down};
-// Команды, которые приходят от GUI в логику. 
-enum class GUICommand {Left, Right, Up, Down, Atack, START, PAUSE, CONTINUE};
 
-// ========================================================================
-// ======================== Классы команд =================================
-// ========================================================================
+// РљРѕРјР°РЅРґС‹, РєРѕС‚РѕСЂС‹Рµ РїСЂРёС…РѕРґСЏС‚ РѕС‚ GUI РІ Р»РѕРіРёРєСѓ.
+enum class GUICommand {Left, Right, Up, Down, Attack, START, PAUSE, CONTINUE, STOP, ABOUT};
+// РљРѕРјР°РЅРґС‹, РєРѕС‚РѕСЂС‹Рµ РїСЂРёС…РѕРґСЏС‚ РѕС‚ Р»РѕРіРёРєРё РІ GUI.
+enum class LOGICCommand {GAME_CONTINUE, GAME_OVER, PLAYER_1_WIN, PLAYER_2_WIN};
 
-/*Базовый класс*/
-class Command {
- public:
-	 //Конструкторы
-	 Command();
-	 Command(t_player_number s_player_number);
-
-	 //Set-функции
-	 void setPlayerNumber(t_player_number s_player_number);   
-
-	 //Get-функции
-	 t_player_number getPlayerNumber();
-
- private:
-   t_player_number player_number;   
+class Wall {
+    int type;
+public:
+    Wall(int type) : type(type) {};
+    ~Wall() {};
+    int getType() {return this->type;}
 };
 
-/*Команда с направлением */
-class CommandWithDirection : public Command {
- public:
-	 //Конструкторы
-	 CommandWithDirection();
-	 CommandWithDirection(t_player_number s_player_number, Direction s_command_direction);
-
-	 //Set-функции
-	 void setCommandDirection(Direction s_command_direction);
-
-	//Get-функции
-	 Direction getCommandDirection();
-
- private:
-	 Direction command_direction;
-};
-
-
-/*Команда движения */
-class CommandMove : public Command {
-
-
-};
-
-/*Команда поворота*/
-class CommandTurn : public CommandWithDirection {
-
-
-};
-
-/*Команда атаки */
-class CommandAttack : public Command {
-
-};
-
-/*Команды от GUI*/
 class CommandFromGUI
 {
 public:
-  CommandFromGUI();
-  ~CommandFromGUI();
+    CommandFromGUI();
+    ~CommandFromGUI();
 
-  //Set-Function
-  void setPlayerNumber(t_player_number s_player_number);
-  void setFromGUICommand(GUICommand s_gui_command);
+    void setPlayerNumber(t_player_number s_player_number);
+    void setFromGUICommand(GUICommand s_gui_command);
 
-  //Get-Function
-  t_player_number getPlayerNumber();
-  GUICommand getGUICommand();
+    t_player_number getPlayerNumber();
+    GUICommand getGUICommand();
 private:
-  t_player_number _playerNumber;
-  GUICommand _guiCommand;
+    t_player_number _playerNumber;
+    GUICommand _guiCommand;
 };

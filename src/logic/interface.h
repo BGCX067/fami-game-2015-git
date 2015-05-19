@@ -1,36 +1,36 @@
-#pragma once
+#ifndef LOGIC_INTERFACE_H
+#define LOGIC_INTERFACE_H
 
-#include "../interface.h"
 #include <string>
 #include <queue>
-#include "map/interface.h"
+#include <QMutex>
+#include "../map/interface.h"
+
 using namespace std;
-/*
-Интерфейсы взаимодействия с системой игровой логики (LOGIC).
-*/
-//Авторы(сначала руководитель, следом вся команда в алфавитном порядке по фамилии):
-//Виктор Сарычев
-//Михаил Александров
-//Сергей Вайцель
-//Пётр Жигалов
-//Светлана Трофимова
 
-namespace logic {
-  class Logic 
-  {
-  public:
-    Logic();
-    ~Logic();
+// Интерфейсы взаимодействия с системой игровой логики (LOGIC).
 
-    string getStatusForGUI(); //gui отдаем статус игры
-    void setNextCommandFromGUI(CommandFromGUI g_commandFromGUI); //суда складывает команды gui
-    void run(); //запуск логики, должна запускать gui    
-  private:
-    string _gameStatus; //текущий статус игры
-    queue<CommandFromGUI> _commandsFromGUI; //очередь gui комманд
+namespace logic
+{
+class Logic
+{
 
-    void setCommandForPlayer(); //дать комманду игроку
-    void updateMap(); //обновить карту после изменений
-  };
-	
+public:
+    Logic(shared_ptr<tmap::TMap> map);
+
+    LOGICCommand getStatusForGUI();                                 // Передача gui статуса игры
+    void setNextCommandFromGUI(CommandFromGUI g_commandFromGUI);    // Передача команд gui
+    void run();                                                     // Запуск логики по таймеру
+
+private:
+    LOGICCommand _gameStatus;                                       // Текущий статус игры
+    queue<CommandFromGUI> _commandsFromGUI;                         // Очередь gui комманд
+    shared_ptr<tmap::TMap> _currentMap;                             // Ссылка на глобальную карту
+
+    QMutex _logicRun;
+};
+
 }
+
+#endif // LOGIC_INTERFACE_H
+
